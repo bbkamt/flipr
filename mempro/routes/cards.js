@@ -11,6 +11,7 @@ router.post('/', async (req, res) => {
     if (card) return res.status(400).send('Card with same question already registered.');
 
     card = new Card({ 
+        deck: req.body.deck,
         question: req.body.question,
         answer: req.body.answer,
     });

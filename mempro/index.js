@@ -12,9 +12,10 @@ mongoose.connect('mongodb://localhost/mempro')
 
 app.set('view engine', 'pug');
 app.use(express.json());
-app.use(express.static(__dirname + '/public'));
+
 app.use('/api/cards', cards);
 app.use('/api/decks', decks);
+app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {
     res.render('index', {
@@ -22,16 +23,14 @@ app.get('/', (req, res) => {
     });
 })
 
-app.get('/deck', async (req, res) => {
+app.get('/api/deck', async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    console.log(req.query.id);
-
-    let card = await Card.find({ question: req.query.id });
+    let card = await Card.find({ question: "hello" });
     if (!card) return res.status(400).send('Card not found.');
 
-    res.send(card[0].question);
+    res.send(card);
 
    })
 

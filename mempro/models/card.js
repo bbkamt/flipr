@@ -2,6 +2,10 @@ const Joi = require('joi');
 const mongoose = require('mongoose');
 
 const cardSchema = new mongoose.Schema({
+    deck: {
+        type: String, 
+        required: true
+    },
     question: {
         type: String, 
         minlength: 1, 
@@ -49,6 +53,7 @@ const Card = mongoose.model("Card", cardSchema);
 
 function validateCard(card) {
     const schema = {
+        deck: Joi.string(),
         question: Joi.string().min(1).max(500),
         answer: Joi.string().min(1).max(500),
         new: Joi.boolean(),
