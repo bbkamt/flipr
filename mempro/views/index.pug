@@ -1,0 +1,24 @@
+extends default
+
+block content
+  div.container
+    h3.deck-name 
+        | Main
+  div.container 
+    a(href=`/deck?id="hello"`)
+        | Deck
+  div.container
+    form(method='POST' action='/api/cards')
+      div.form-group
+        label(for='deck') Deck:
+        input#deck.form-control(type='text', placeholder='Deck name')
+      div.form-group
+        label(for='front') Front:
+        input#front.form-control(type='text', placeholder='Front of the card')
+      div.form-group
+        label(for='back') Back: 
+        input#back.form-control(type='text', placeholder='Back of the card')
+      div.form-group
+        label(for='tags') Tags: 
+        input#tags.form-control(type='text', placeholder='Any tags')
+      button.btn.btn-primary(type='submit') Create Card
