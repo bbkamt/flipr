@@ -1,3 +1,4 @@
+const bodyParser = require('body-parser');
 const cards = require('./routes/cards');
 const {Card, validate} = require('./models/card');
 const decks = require('./routes/decks');
@@ -13,6 +14,10 @@ mongoose.connect('mongodb://localhost/mempro')
 app.set('view engine', 'pug');
 app.use(express.json());
 
+// User bodyParser to get data from html form
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use('/api/cards', cards);
 app.use('/api/decks', decks);
 app.use(express.static(__dirname + '/public'));
@@ -27,12 +32,11 @@ app.get('/api/deck', async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    let card = await Card.find({ question: "hello" });
+    let card = await Card.find({ question: req.body.question });
     if (!card) return res.status(400).send('Card not found.');
 
     res.send(card);
-
-   })
+    })
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
