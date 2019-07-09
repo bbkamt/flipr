@@ -15,7 +15,6 @@ router.get('/', async (req, res) => {
     console.log(card);
 
     res.render('review', {
-        title: 'Mempro',
         Question: card.question,
         Answer: card.answer
     })

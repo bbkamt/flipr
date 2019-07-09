@@ -1,21 +1,24 @@
 doctype html
 html
   head
-    title #{title}
+    title Mempro
     link(rel='stylesheet', href='/css/style.css')
     meta(name="viewport" content="width=device-width, initial-scale=1")
   body
     main
       block header
         header.header
-          h1 #{title}
+          h1 Mempro
+      block header
+        header#mainNav
+          ul#mainNav
+            a(href='/') Home
+            a(href='/api/cards') Add
+            a(href='/api/decks') Decks
+            a(href='/api/study') Study
+            a(href='#') Account 
       block content
-    nav.mainNav 
-      div.container 
-        div.navLink 
-          ul 
-            a(href='/api/cards') Add
-            a(href='/api/cards') Add
+          
   footer
     main
       block footer

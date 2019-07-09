@@ -2,23 +2,20 @@ extends default
 
 block content
   div.container
-    h3.deck-name 
-        | Main
-  div.container 
-    a(href=`/deck?id="hello"`)
-        | Deck
-  div.container
+    h3.pageTitle
+        | Add Card
+  div.addFormGroup
     form(method='post' action='/api/cards')
-      div.form-group
-        label(for="deck") Deck:
+      div.addFormGroup 
+        label(for="deck") Deck: <br>
         input#deck.form-control(input name="deck" type='text', placeholder='Deck name')
-      div.form-group
-        label(for="question") Front:
+      div.addFormGroup 
+        label(for="question") Front: <br>
         input#front.form-control(input name="question" type='text', placeholder='Front of the card')
-      div.form-group
-        label(for='back') Back: 
+      div.addFormGroup 
+        label(for='back') Back: <br>
         input#back.form-control(input name="answer" type='text', placeholder='Back of the card')
-      div.form-group
-        label(for='tags') Tags: 
+      div.addFormGroup 
+        label(for='tags') Tags: <br>
         input#tags.form-control(input name="tags" type='text', placeholder='Any tags')
       button.btn.btn-primary(type='submit') Create Card

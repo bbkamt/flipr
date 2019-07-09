@@ -25,15 +25,11 @@ app.use('/api/study', study);
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {
-    res.render('index', {
-        title: 'MemPro'
-    });
+    res.render('index');
 })
 
 app.get('/api/cards', (req, res) => {
-    res.render('addCard', {
-        title: 'MemPro'
-    });
+    res.render('addCard');
 })
 
 app.get('/api/deck', async (req, res) => {
