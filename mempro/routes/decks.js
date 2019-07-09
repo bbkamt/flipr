@@ -1,7 +1,21 @@
 const {Deck, validate} = require('../models/deck');
+const decks = require('../routes/decks');
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
+
+router.get('/', async (req, res) => {
+    const { error } = validate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let decks = await Deck.find();
+    if (!decks) return res.status(400).send('You don\'t have any decks. Create one and try again.');
+
+    res.render('decks', {
+        deck: decks[0].name
+    });
+    })
+
 
 router.post('/', async (req, res) => {
     const { error } = validate(req.body);

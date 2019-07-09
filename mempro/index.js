@@ -28,19 +28,15 @@ app.get('/', (req, res) => {
     res.render('index');
 })
 
-app.get('/api/cards', (req, res) => {
-    res.render('addCard');
-})
+// app.get('/api/deck', async (req, res) => {
+//     const { error } = validate(req.body);
+//     if (error) return res.status(400).send(error.details[0].message);
 
-app.get('/api/deck', async (req, res) => {
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+//     let card = await Card.find({ question: req.body.question });
+//     if (!card) return res.status(400).send('Card not found.');
 
-    let card = await Card.find({ question: req.body.question });
-    if (!card) return res.status(400).send('Card not found.');
-
-    res.send(card);
-    })
+//     res.send(card);
+//     })
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
