@@ -8,9 +8,14 @@ const mongoose = require('mongoose');
 
 const app = express();
 
-mongoose.connect('mongodb://localhost/mempro')
+mongoose.connect('mongodb://localhost/mempro', { useNewUrlParser: true })
     .then(() => console.log('Connected to MongoDB...'))
     .catch(err => console.error('Could not connect to MongoDB...'));
+
+// Get rid of deprecationg warnings from mongoose
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 
 app.set('view engine', 'pug');
 app.use(express.json());
