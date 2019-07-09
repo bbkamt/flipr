@@ -18,6 +18,9 @@ const cardSchema = new mongoose.Schema({
         minlength: 1, 
         maxlength: 500
     },
+    tags: {
+        type: String
+    },
     new: {
         type: Boolean, 
         default: true
@@ -56,6 +59,7 @@ function validateCard(card) {
         deck: Joi.string(),
         question: Joi.string().min(1).max(500),
         answer: Joi.string().min(1).max(500),
+        tags: Joi.string(),
         new: Joi.boolean(),
         rating: Joi.number().default(2.5),
         count: Joi.number().default(0),

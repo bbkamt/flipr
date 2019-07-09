@@ -2,6 +2,7 @@ const bodyParser = require('body-parser');
 const cards = require('./routes/cards');
 const {Card, validate} = require('./models/card');
 const decks = require('./routes/decks');
+const study = require('./routes/study');
 const express = require('express');
 const mongoose = require('mongoose');
 
@@ -20,10 +21,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api/cards', cards);
 app.use('/api/decks', decks);
+app.use('/api/study', study);
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {
     res.render('index', {
+        title: 'MemPro'
+    });
+})
+
+app.get('/api/cards', (req, res) => {
+    res.render('addCard', {
         title: 'MemPro'
     });
 })
