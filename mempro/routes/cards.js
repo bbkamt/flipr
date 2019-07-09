@@ -33,5 +33,16 @@ router.post('/', async (req, res) => {
     res.send(card);
 });
 
+router.put('/', async (req, res) => {
+    const { error } = validate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let card = await Card.findOne({ question: req.body.question });
+    if (!card) return res.status(400).send('That card does not exist');
+    console.log(req.body.question);
+
+    Card.findOneAndUpdate(req.body.question, { answer: req.body.answer });
+    res.send('Product udpated.');
+});
     
 module.exports = router;

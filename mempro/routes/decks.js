@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     if (!decks) return res.status(400).send('You don\'t have any decks. Create one and try again.');
 
     res.render('decks', {
-        deck: decks[0].name
+        deck: decks
     });
     })
 

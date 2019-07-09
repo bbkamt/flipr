@@ -12,7 +12,7 @@ mongoose.connect('mongodb://localhost/mempro', { useNewUrlParser: true })
     .then(() => console.log('Connected to MongoDB...'))
     .catch(err => console.error('Could not connect to MongoDB...'));
 
-// Get rid of deprecationg warnings from mongoose
+// Get rid of deprecation warnings from mongoose
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
@@ -33,6 +33,9 @@ app.get('/', (req, res) => {
     res.render('index');
 })
 
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Listening on port ${port}...`));
+
 // app.get('/api/deck', async (req, res) => {
 //     const { error } = validate(req.body);
 //     if (error) return res.status(400).send(error.details[0].message);
@@ -43,5 +46,3 @@ app.get('/', (req, res) => {
 //     res.send(card);
 //     })
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Listening on port ${port}...`));

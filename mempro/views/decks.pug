@@ -5,6 +5,8 @@ block content
     h3.pageTitle
         | Decks 
     p Select one to study 
-    p #{deck}
+    ul 
+        for item in deck
+            li=item.name
 
   
