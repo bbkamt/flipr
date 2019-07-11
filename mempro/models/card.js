@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const mongoose = require('mongoose');
+const datetime = require('node-datetime');
 
 const cardSchema = new mongoose.Schema({
     deck: {
@@ -25,7 +26,7 @@ const cardSchema = new mongoose.Schema({
         type: Boolean, 
         default: true
     },
-    rating: {
+    difficulty: {
         type: Number, 
         default: 2.5,
         min: 1.3,
@@ -40,10 +41,15 @@ const cardSchema = new mongoose.Schema({
         default: 0, 
         min: 0
     },
+    interval: {
+        type: Number,
+        default: 1,
+        min: 0
+    },
     dueDate: {
-        type: Date,
+        type: datetime,
         required: true,
-        default: Date.now
+        default: datetime.create()
     },
     due: {
         type: Boolean, 
@@ -61,7 +67,7 @@ function validateCard(card) {
         answer: Joi.string().min(1).max(500),
         tags: Joi.string(),
         new: Joi.boolean(),
-        rating: Joi.number().default(2.5),
+        difficulty: Joi.number().default(2.5),
         count: Joi.number().default(0),
         correctCount: Joi.number().default(0),
         dueDate: Joi.date(),

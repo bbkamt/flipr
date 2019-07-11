@@ -6,4 +6,5 @@ block content
         | Main
     p This is the question:  #{Question}
     p This is the answer: #{Answer}
-  
+  form(method='post' action='/api/study')
+      button.btn.btn-primary(type='submit') Good 
