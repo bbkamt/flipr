@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
     card = await card.save();
     console.log(card);
 
-    res.send(card);
+    res.render('addCard');
 });
 
 router.put('/', async (req, res) => {
