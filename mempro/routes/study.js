@@ -11,9 +11,9 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 router.get('/', async (req, res) => {
     let card = await Card.findOne({ due: true });
-    if (!card) return res.status(400).send('You\'re up to date! No cards to study today!');
-
-    console.log(card);
+    if (!card) {
+        res.render('finished')
+    }
 
     res.render('study', {
         Question: card.question,
@@ -33,8 +33,9 @@ router.post('/', async (req, res) => {
     if (error) return res.status(400).send(error.details[0].message);
 
     let card = await Card.findOne({ due: true });
-    if (!card) return res.status(400).send('No more cards due! You\'re up to date!');
-    console.log(card);
+    if (!card) {
+        res.render('finished')
+    }
 
     if (card.new === true) {
         
@@ -101,12 +102,11 @@ router.post('/', async (req, res) => {
 
     // get next card 
     card = await Card.findOne({ due: true });
-    if (!card) return res.status(400).send('You\'re up to date! No cards to study today!');
+    if (!card) {
+        res.render('finished')
+    }
 
-    res.render('study', {
-        Question: card.question,
-        Answer: card.answer
-    })
+    
 });
 
 module.exports = router;
