@@ -54,6 +54,10 @@ const cardSchema = new mongoose.Schema({
     due: {
         type: Boolean, 
         default: true
+    },
+    current: {
+        type: Boolean,
+        default: false
     }
 
 });
