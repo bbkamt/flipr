@@ -1,5 +1,4 @@
 const {Card, validate} = require('../models/card');
-
 const bodyParser = require('body-parser');
 const datetime = require('node-datetime');
 const express = require('express');
@@ -10,6 +9,9 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
 router.get('/', async (req, res) => {
+
+    updateAllDue();
+
     let card = await Card.findOne({ due: true });
     if (!card) return res.render('finished')
     else {
@@ -22,13 +24,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-function setDifficulty(card, q) {
-    card.difficulty = card.difficulty + (0.1-(3-q) * (0.08+(3-q) * 0.02));
-        if (card.difficulty < 1.3) {
-            card.difficulty = 1.3;
-        }
-
-}
 
 
 router.post('/', async (req, res) => {
@@ -44,90 +39,15 @@ router.post('/', async (req, res) => {
     let q = req.body.difficulty;
     console.log(q);
 
-    if (card.new === true) {
-        card.current = false;
-        console.log("new");
-        // set new difficult based off user decision 
-        card.difficulty = card.difficulty + (0.1-(3-q) * (0.08+(3-q) * 0.02));
-        if (card.difficulty < 1.3) {
-            card.difficulty = 1.3;
-        }
-        setDifficulty(card, q)
-        
-        // set interval between next repetition 
-        if (card.count === 0){
-            card.interval = 1;
-        }
-        else if (card.count === 1) {
-            card.interval = 6;
-        }
-        else {
-            card.interval = (card.count-1) * (card.difficulty * card.correctCount);
-        }
-
-        // update remaining fields 
-        card.count++;
-        card.new = false;
-
-        if (q === 0) card.due = true;
-        else card.due = false; 
-        
-        // update dueDate 
-        let date = datetime.create();
-        date.offsetInDays(card.interval);
-        card.dueDate = date;
-
-        if (q != 0) {
-            card.correctCount++;
-        }
-        else {
-            card.correctCount = 0;
-        }
-    }
-
+    setDifficulty(card, q);
+    setInterval(card);
+    setDueDate(card);
+    setCorrectCount(card, q);
+    setCount(card);
+    setNew(card);
+    setDue(card, q);
+    setCurrent(card);
     
-    // if card not new update as follows 
-    else {
-        card.current = false;
-        console.log("old");
-         // set new difficult based off user decision 
-         card.difficulty = card.difficulty + (0.1-(3-q) * (0.08+(3-q) * 0.02));
-         if (card.difficulty < 1.3) {
-             card.difficulty = 1.3;
-         }
-        
-         // set interval between next repetition 
-         if (card.count === 0){
-             card.interval = 1;
-         }
-         else if (card.count === 1) {
-             card.interval = 6;
-         }
-         else {
-             card.interval = (card.count-1) * (card.difficulty * card.correctCount);
-         }
- 
-         // update remaining fields 
-         card.count++;
-         if (q == 0) {
-            card.due = true;
-         } 
-         else {
-            card.due = false; 
-         } 
-         
-         // update dueDate 
-         let date = datetime.create();
-         date.offsetInDays(card.interval);
-         card.dueDate = date;
- 
-         if (q != 0) {
-             card.correctCount++;
-         }
-         else {
-             card.correctCount = 0;
-         }
-    }
     card = await card.save();
     console.log(card);
 
@@ -146,3 +66,61 @@ router.post('/', async (req, res) => {
 });
 
 module.exports = router;
+
+async function updateAllDue(){
+    const date = parseInt(datetime.create().format('Ymd'));
+    const res = await Card.updateMany({ due: false, dueDate: {$lt: date } }, { due: true });
+}
+
+function setDifficulty(card, q) {
+    card.difficulty = card.difficulty + (0.1-(3-q) * (0.08+(3-q) * 0.02));
+    if (card.difficulty < 1.3) {
+        card.difficulty = 1.3;
+    }
+}
+
+function setInterval(card){
+    if (card.count === 0){
+        card.interval = 1;
+    }
+    else if (card.count === 1) {
+        card.interval = 6;
+    }
+    else {
+        card.interval = (card.count-1) * (card.difficulty * card.correctCount);
+    }
+}
+
+function setDueDate(card){
+    let date = datetime.create();
+        date.offsetInDays(card.interval);
+        card.dueDate = date;
+}
+
+function setCorrectCount(card, q){
+    if (q != 0) {
+        card.correctCount++;
+    }
+    else {
+        card.correctCount = 0;
+    }
+}
+
+function setCount(card){
+    card.count++;
+}
+
+function setNew(card){
+    if (card.new = true) {
+        card.new = false;
+    }
+}
+
+function setDue(card, q){
+    if (q == 0) card.due = true;
+    else card.due = false; 
+}
+
+function setCurrent(card){
+    card.current = false;
+}

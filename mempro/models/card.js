@@ -47,9 +47,9 @@ const cardSchema = new mongoose.Schema({
         min: 0
     },
     dueDate: {
-        type: datetime,
+        type: Number,
         required: true,
-        default: datetime.create()
+        default: parseInt(datetime.create().format('Ymd'))
     },
     due: {
         type: Boolean, 
@@ -74,7 +74,7 @@ function validateCard(card) {
         difficulty: Joi.number().default(2.5),
         count: Joi.number().default(0),
         correctCount: Joi.number().default(0),
-        dueDate: Joi.date(),
+        dueDate: Joi.number(),
         due: Joi.boolean()
     };
     
