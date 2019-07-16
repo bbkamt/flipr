@@ -1,4 +1,5 @@
 const {Card, validate} = require('../models/card');
+
 const bodyParser = require('body-parser');
 const datetime = require('node-datetime');
 const express = require('express');
@@ -17,6 +18,7 @@ router.get('/', async (req, res) => {
     else {
         card.current = true; 
         card = await card.save();
+        console.log(req.body);
         res.render('study', {
             Question: card.question,
             Answer: card.answer
@@ -24,18 +26,32 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.post('/decks', async (req, res) => {
+    console.log(req.body.deck);
+    let card = await Card.findOne({ deck: req.body.deck, due: true });
+    if (!card) return res.render('finished')
+    else {
+        card.current = true; 
+        card = await card.save();
+        console.log(req.body);
+        res.render('study', {
+            Question: card.question,
+            Answer: card.answer
+        })
+    }
+})
+
 
 
 router.post('/', async (req, res) => {
 
     // const { error } = validate(req.body);
     // if (error) return res.status(400).send(error.details[0].message);
-    
     let card = await Card.findOne({ current: true });
     if (!card) {
         res.render('finished')
     }
-    
+    console.log(req.body);
     let q = req.body.difficulty;
     console.log(q);
 
@@ -52,7 +68,7 @@ router.post('/', async (req, res) => {
     console.log(card);
 
     // get next card 
-    card = await Card.findOne({ due: true });
+    card = await Card.findOne({ deck: card.deck, due: true });
     if (!card) return res.render('finished')
 
     else {
@@ -92,8 +108,8 @@ function setInterval(card){
 }
 
 function setDueDate(card){
-    let date = datetime.create();
-        date.offsetInDays(card.interval);
+    let date = parseInt(datetime.create().format('Ymd'));
+        date+= card.interval;
         card.dueDate = date;
 }
 

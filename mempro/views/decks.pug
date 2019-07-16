@@ -5,8 +5,8 @@ block content
     h3.pageTitle
         | Decks 
     p Select one to study 
-    ul 
-        for item in deck
-            li=item.name
-
-  
+    form(method='post' action='/api/study/decks')
+      ul 
+        each item in deck
+            li
+              button.btn.btn-primary(type='submit', name='deck', value=item.name) #{item.name}

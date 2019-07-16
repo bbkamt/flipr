@@ -1,4 +1,5 @@
 const {Card, validate} = require('../models/card');
+const {Deck, deckValidate} = require('../models/deck');
 const cards = require('../routes/cards');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -28,8 +29,18 @@ router.post('/', async (req, res) => {
         tags: req.body.tags
     });
     card = await card.save();
-    console.log(card);
-
+   
+    let deck = await Deck.findOne({ name: card.deck });
+   
+    if (!deck) {
+    
+        deck = new Deck({
+            name: card.deck,
+        })
+        deck = await deck.save();
+        
+    }
+    
     res.render('addCard');
 });
 

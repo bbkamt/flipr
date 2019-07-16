@@ -5,7 +5,6 @@ const {card} = require('./card');
 const Deck = mongoose.model('Deck', new mongoose.Schema({
    userId: {
        type: String, 
-       required: true, 
        minlength: 1,
        maxlength: 50
    },
