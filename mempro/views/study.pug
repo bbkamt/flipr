@@ -3,7 +3,7 @@ extends default
 block content
   div.container
     h3.deck-name 
-        | Main
+        | #{Deck}
     p This is the question:  #{Question}
     p This is the answer: #{Answer}
   form(method='post' action='/api/study')

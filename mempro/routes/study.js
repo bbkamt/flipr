@@ -35,16 +35,31 @@ router.post('/decks', async (req, res) => {
         card = await card.save();
         console.log(req.body);
         res.render('study', {
+            Answer: card.answer,
             Question: card.question,
-            Answer: card.answer
+            Deck: card.deck
         })
     }
 })
 
 
+router.post('/decks/answer', async (req, res) => {
+    console.log(req.body.deck);
+    let card = await Card.findOne({ deck: req.body.deck, due: true });
+    if (!card) return res.render('finished')
+    else {
+        card.current = true; 
+        card = await card.save();
+        console.log(req.body);
+        res.render('study', {
+            Question: card.question,
+            Answer: card.answer,
+            Deck: card.deck
+        })
+    }
+})
 
 router.post('/', async (req, res) => {
-
     // const { error } = validate(req.body);
     // if (error) return res.status(400).send(error.details[0].message);
     let card = await Card.findOne({ current: true });
