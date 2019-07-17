@@ -1,13 +1,13 @@
 extends default
 
 block content
-  div.container
-    h3.pageTitle
+  div.deckContainer
+    h3.deckContainer.pageTitle
         | Decks 
-    p Select one to study 
+    p.container.subHeading Select one to study 
     form(method='post' action='/api/study/q')
       ul 
         each item in deck
-            li
-              button.btn.btn-primary(type='submit', name='deck', value=item.name) #{item.name}
+            ol#DeckList 
+              button.btn.btn.decks(type='submit', name='deck', value=item.name) #{item.name}
     
