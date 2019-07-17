@@ -6,9 +6,9 @@ block content
         | #{Deck}
     p #{Question}
     
-  form(method='post' action='/api/study')
+  form(method='post' action='/api/study/decks')
       // name section of the buttons below is passed in body of html request 
       // can be accessed in .get and .post etc as req.body.NAME 
-      button.btn.btn-primary(type='submit', name='answer', value='0') Show Answer
+      button.btn.btn-primary(type='submit', name='deck', value=Deck) Show Answer
       
       
