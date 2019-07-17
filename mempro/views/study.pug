@@ -1,16 +1,15 @@
 extends default
 
 block content
-  div.container
-    h3.deck-name 
+  div.reviewContainer
+    h3#pageTitle 
         | #{Deck}
-    p #{Question}
-    p #{Answer}
-  form(method='post' action='/api/study/a')
-      // name section of the buttons below is passed in body of html request 
-      // can be accessed in .get and .post etc as req.body.NAME 
-      button.btn.btn-primary(type='submit', name='difficulty', value='0') Don't know
-      button.btn.btn-primary(type='submit', name='difficulty', value='1') Hard
-      button.btn.btn-primary(type='submit', name='difficulty', value='2') Good 
-      button.btn.btn-primary(type='submit', name='difficulty', value='3') Easy 
-      
+    p#question #{Question}
+    p#answer #{Answer}
+    form(method='post' action='/api/study/a')
+        // name section of the buttons below is passed in body of html request 
+        // can be accessed in .get and .post etc as req.body.NAME 
+        button.btn.btn-review(type='submit', name='difficulty', value='0') Don't know
+        button.btn.btn-review(type='submit', name='difficulty', value='1') Hard
+        button.btn.btn-review(type='submit', name='difficulty', value='2') Good 
+        button.btn.btn-review(type='submit', name='difficulty', value='3') Easy 

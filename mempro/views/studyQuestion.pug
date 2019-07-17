@@ -1,14 +1,14 @@
 extends default
 
 block content
-  div.container
-    h3.deck-name 
+  div.reviewContainer
+    h3#pageTitle 
         | #{Deck}
-    p #{Question}
+    p#question #{Question}
     
-  form(method='post' action='/api/study/decks')
+    form(method='post' action='/api/study/decks')
       // name section of the buttons below is passed in body of html request 
       // can be accessed in .get and .post etc as req.body.NAME 
-      button.btn.btn-primary(type='submit', name='deck', value=Deck) Show Answer
+      button.btn.btn-displayAnswer(type='submit', name='deck', value=Deck) Show Answer
       
       

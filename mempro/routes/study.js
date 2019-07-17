@@ -21,7 +21,10 @@ is due to be reviewed from the deck selected by the user from the decks
 page. 
 */
 router.post('/q', async (req, res) => {
-    console.log(req.body.deck);
+
+    // Clear any card with 'current' flag set to true
+    let c = await Card.updateMany({ current: true }, { current: false });
+
     let card = await Card.findOne({ deck: req.body.deck, due: true });
     if (!card) return res.render('finished')
     else {
@@ -83,13 +86,13 @@ Post request which returns the question and answer side of the
 card being reviewed to the browser. 
 */
 router.post('/decks', async (req, res) => {
-    console.log(req.body.deck);
+
     let card = await Card.findOne({ deck: req.body.deck, due: true });
     if (!card) return res.render('finished')
     else {
         card.current = true; 
         card = await card.save();
-        console.log(req.body);
+
         res.render('study', {
             Answer: card.answer,
             Question: card.question,
