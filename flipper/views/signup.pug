@@ -1,0 +1,18 @@
+extends default
+
+block content
+  div.container
+    h3.pageTitle
+        | Signup 
+  div.addFormGroup
+    form(method='post' action='/api/signup')
+      div.addFormGroup 
+        label(for="passsword") Username: <br>
+        input#deck.form-control(input name="username" type='text', placeholder='Username')
+      div.addFormGroup 
+        label(for="password") Password: <br>
+        input#front.form-control(input name="password" type='text', placeholder='Password')
+      div.addFormGroup 
+        label(for="password") Email: <br>
+        input#front.form-control(input name="email" type='text', placeholder='Email address')
+      button.btn.btn-primary(type='submit') Signup 

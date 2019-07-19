@@ -1,8 +1,8 @@
 const bodyParser = require('body-parser');
 const cards = require('./routes/cards');
-const {Card, validate} = require('./models/card');
 const decks = require('./routes/decks');
 const study = require('./routes/study');
+const users = require('./routes/users');
 const express = require('express');
 const mongoose = require('mongoose');
 
@@ -27,6 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/cards', cards);
 app.use('/api/decks', decks);
 app.use('/api/study', study);
+app.use('/api/signup', users);
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {

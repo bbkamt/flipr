@@ -1,6 +1,8 @@
+const {Card} = require('../models/card');
 const {Deck, validate} = require('../models/deck');
 const decks = require('../routes/decks');
 const mongoose = require('mongoose');
+const datetime = require('node-datetime');
 const express = require('express');
 const router = express.Router();
 
@@ -8,13 +10,15 @@ router.get('/', async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
+    updateAllDue();
+
     let decks = await Deck.find().sort({ name: 1 });
     if (!decks) return res.status(400).send('You don\'t have any decks. Create one and try again.');
     
     res.render('decks', {
         deck: decks
     });
-    })
+});
 
 
 router.post('/', async (req, res) => {
@@ -32,5 +36,10 @@ router.post('/', async (req, res) => {
 
     res.send(deck);
 });
+
+async function updateAllDue(){
+    const date = parseInt(datetime.create().format('Ymd'));
+    const res = await Card.updateMany({ due: false, dueDate: {$lte: date } }, { due: true });
+}
 
 module.exports = router; 
