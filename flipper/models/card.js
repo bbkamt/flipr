@@ -7,6 +7,9 @@ const cardSchema = new mongoose.Schema({
         type: String, 
         required: true
     },
+    user: {
+        type: String
+    },
     question: {
         type: String, 
         minlength: 1, 

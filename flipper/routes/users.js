@@ -36,6 +36,53 @@ router.post('/', async (req, res) => {
     res.send(newUser);
     
 });
+
+router.post('/login', passport.authenticate('login', {
+    successRedirect: "/api/cards",
+    failureRedirect: '/api/signup', 
+    failureFlash: true
+}));
+
+router.get("/logout", function(req, res) {
+    req.logout();
+    res.redirect("/");
+});
+
+router.use(function(req, res, next) {
+    res.locals.currentUser = req.user;
+    res.locals.errors = req.flash("error");
+    res.locals.infos = req.flash("info");
+    next();
+});
+
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        req.flash("info", "You must be logged in to see this page.");
+        res.redirect("/login");
+    }
+}
+
+
+router.post('/user', async (req, res) => {
+    // User details
+    const username = req.body.username; 
+    const password = req.body.password;
+
+    let user = await User.findOne({ username: username });
+    if (!user) res.redirect('/');
+    else {
+        bcrypt.compare(password, user.password, function(err, result){
+            if (result == true) {
+                res.send("Success");
+            }
+            else {
+                res.send("Incorrect password");
+            }
+        })
+    }
+})
     
 router.get("/", async (req, res) => {
     let users = await User.find().sort( {createdAt: -1 });
@@ -45,4 +92,5 @@ router.get("/", async (req, res) => {
     else return res.status(400).send('No users'); 
 });
 
+exports.ensureAuthenticated = ensureAuthenticated;
 module.exports = router;

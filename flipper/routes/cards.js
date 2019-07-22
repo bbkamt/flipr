@@ -15,6 +15,17 @@ router.get('/', (req, res) => {
     res.render('addCard');
 })
 
+const a = function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        req.flash("info", "You must be logged in to see this page.");
+        res.redirect("/login");
+    }
+};
+
+router.use(a);
+
 router.post('/', async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -36,6 +47,7 @@ router.post('/', async (req, res) => {
     
         deck = new Deck({
             name: card.deck,
+            user: req.user.username
         })
         deck = await deck.save();
         

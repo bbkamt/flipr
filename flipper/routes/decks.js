@@ -6,13 +6,26 @@ const datetime = require('node-datetime');
 const express = require('express');
 const router = express.Router();
 
+
+const a = function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        req.flash("info", "You must be logged in to see this page.");
+        res.redirect("/login");
+    }
+};
+
+router.use(a);
+
 router.get('/', async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
+    console.log(req.user);
     updateAllDue();
 
-    let decks = await Deck.find().sort({ name: 1 });
+    let decks = await Deck.find({ user: req.user.username }).sort({ name: 1 });
     if (!decks) return res.status(400).send('You don\'t have any decks. Create one and try again.');
     
     res.render('decks', {
@@ -28,8 +41,10 @@ router.post('/', async (req, res) => {
     let deck = await Deck.findOne({ name: req.body.name });
     if (deck) return res.status(400).send('Deck with same name already exists.');
 
+    console.log(req.user);
     deck = new Deck({ 
         userId: req.body.userId,
+        user: req.user,
         name: req.body.name,
     });
     deck = await deck.save();

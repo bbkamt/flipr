@@ -4,11 +4,11 @@ block content
   div.mainArea
     block.welcomeText 
       p     
-        | Welcome to MemPro. <br>
+        | Welcome to Flipper. <br>
       p 
         | <br> 
       p 
-        | MemPro lets you create your own flashcards, 
+        | Flipper lets you create your own flashcards, 
         | and stops the things you want to remember 
         | fading from memory. 
       p 
@@ -25,12 +25,12 @@ block content
         h3.container 
             | Sign in 
       div.container
-        form(method='post' action='/api/users')
+        form(method='post' action='/api/signup/login')
           div.form-group
             label(for="username") Username: <br>
             input#username.form-control(input name="username" type='text', placeholder='Your username')
           div.form-group
             label(for="password") Password: <br>
-            input#password.form-control(input name="password" type='text', placeholder='Your password')
+            input#password.form-control(input name="password" type='password', placeholder='Your password')
           button.btn.btn-primary(type='submit') Sign in  
   

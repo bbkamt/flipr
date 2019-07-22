@@ -6,14 +6,27 @@ iii) User is shown quesiton, answer, and buttons to rate card, and POST /api/stu
 */
 
 const {Card, validate} = require('../models/card');
+const {ensureAuthenticated} = require('./users');
 const bodyParser = require('body-parser');
 const datetime = require('node-datetime');
 const express = require('express');
+const passport = require('passport');
 const router = express.Router();
 
 // User bodyParser to get data from html form
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
+
+const a = function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        req.flash("info", "You must be logged in to see this page.");
+        res.redirect("/login");
+    }
+};
+
+router.use(a);
 
 /* 
 Post request that will return the question side of a card that 
@@ -21,11 +34,10 @@ is due to be reviewed from the deck selected by the user from the decks
 page. 
 */
 router.post('/q', async (req, res) => {
-
     // Clear any card with 'current' flag set to true
     let c = await Card.updateMany({ current: true }, { current: false });
 
-    let card = await Card.findOne({ deck: req.body.deck, due: true });
+    let card = await Card.findOne({ user: req.username, deck: req.body.deck, due: true });
     if (!card) return res.render('finished')
     else {
         card.current = true; 
@@ -106,7 +118,7 @@ router.post('/decks', async (req, res) => {
 Get request - not currently in use. 
 */
 router.get('/', async (req, res) => {
-
+    
     // Move this function call to a separate button on decks page 
     updateAllDue();
 

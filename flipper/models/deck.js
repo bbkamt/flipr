@@ -8,6 +8,9 @@ const Deck = mongoose.model('Deck', new mongoose.Schema({
        minlength: 1,
        maxlength: 50
    },
+   user: {
+       type: String
+   },
    name: {
        type: String, 
        required: true,

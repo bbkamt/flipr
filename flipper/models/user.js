@@ -45,6 +45,11 @@ userSchema.pre('save', async function() {
   user.password = await bcrypt.hash(user.password, salt);
 });
 
+function hashPassword(password){
+  const salt = bcrypt.genSalt(SALT_FACTOR);
+  pw = bcrypt.hash(password, salt);
+  return pw;
+}
 
 // userSchema.methods.checkPassword = function(guess, done) {
 //   bcrypt.compare(guess, this.password, function(err, isMatch){
@@ -56,6 +61,14 @@ userSchema.methods.generateAuthToken = function() {
   const token = jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'));
   return token;
 }
+
+userSchema.methods.checkPassword = function(guess, done) {
+  bcrypt.compare(guess, this.password, function(err, isMatch) {
+  done(err, isMatch);
+  });
+};
+
+
 
 // attach schema to model 
 const User = mongoose.model('User', userSchema);
@@ -71,6 +84,9 @@ function validateUser(user) {
 }
 
 
+
 // export 
 exports.User = User; 
 exports.validate = validateUser;
+exports.hashPassword = hashPassword;
+// exports.checkPassword = checkPassword;

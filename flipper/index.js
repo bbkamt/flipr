@@ -1,16 +1,23 @@
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const flash = require('connect-flash');
+const express = require('express');
+const mongoose = require('mongoose');
+const passport = require('passport');
+const session = require('express-session');
+const setUpPassport = require('./setuppassport');
+
 const cards = require('./routes/cards');
 const decks = require('./routes/decks');
 const study = require('./routes/study');
 const users = require('./routes/users');
-const express = require('express');
-const mongoose = require('mongoose');
 
 const app = express();
 
 mongoose.connect('mongodb://localhost/mempro', { useNewUrlParser: true })
     .then(() => console.log('Connected to MongoDB...'))
     .catch(err => console.error('Could not connect to MongoDB...'));
+setUpPassport();
 
 // Get rid of deprecation warnings from mongoose
 mongoose.set('useNewUrlParser', true);
@@ -22,7 +29,16 @@ app.use(express.json());
 
 // User bodyParser to get data from html form
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(session({
+    secret: "TKRv0IJs=HYqrvagQ#&!F!%V]Ww/4KiVs$s,<<MX", 
+    resave: true, 
+    saveUninitialized: true
+}));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/api/cards', cards);
 app.use('/api/decks', decks);
