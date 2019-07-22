@@ -4,6 +4,13 @@ const {User} = require("../models/user");
 const router = express.Router();
 const passport = require("passport");
 
+router.use(function(req, res, next) {
+    res.locals.currentUser = req.user;
+    res.locals.errors = req.flash("error");
+    res.locals.infos = req.flash("info");
+    next();
+});
+
 router.get('/', async (req, res) => {
     res.render("signup");
 })
@@ -37,33 +44,24 @@ router.post('/', async (req, res) => {
     
 });
 
+/*
+POST request for login. 
+Authentication is performed by passport module. 
+Redirect to appropriate route based on result of authentication. 
+*/ 
 router.post('/login', passport.authenticate('login', {
-    successRedirect: "/api/cards",
+    successRedirect: "/api/decks",
     failureRedirect: '/api/signup', 
     failureFlash: true
 }));
 
+/*
+Logout 
+*/
 router.get("/logout", function(req, res) {
     req.logout();
     res.redirect("/");
 });
-
-router.use(function(req, res, next) {
-    res.locals.currentUser = req.user;
-    res.locals.errors = req.flash("error");
-    res.locals.infos = req.flash("info");
-    next();
-});
-
-function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        next();
-    } else {
-        req.flash("info", "You must be logged in to see this page.");
-        res.redirect("/login");
-    }
-}
-
 
 router.post('/user', async (req, res) => {
     // User details
@@ -85,12 +83,23 @@ router.post('/user', async (req, res) => {
 })
     
 router.get("/", async (req, res) => {
-    let users = await User.find().sort( {createdAt: -1 });
+    let users = await User.find().sort( { createdAt: -1 });
     if (users){
         res.render("signup", { users: users });
     }
     else return res.status(400).send('No users'); 
 });
 
-exports.ensureAuthenticated = ensureAuthenticated;
+
+const ensureAuth = function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        req.flash("info", "You must be logged in to see this page.");
+        res.redirect("/login");
+    }
+}
+
+
+exports.ensureAuthenticated = ensureAuth;
 module.exports = router;

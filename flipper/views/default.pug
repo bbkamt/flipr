@@ -12,12 +12,19 @@ html
       block header
         header#mainNav
           ul#mainNav
-            a(href='/') Home
-            a(href='/api/cards') Add
-            a(href='/api/decks') Decks
+            li#mainNav
+              a(href='/') Home
+            li#mainNav
+              a(href='/api/cards') Add
+            li#mainNav
+              a(href='/api/decks') Decks
             //-a(href='/api/study') Study
-            a(href='#') Account 
-            a(href='/api/signup') Sign up
+            li#mainNav
+              a(href='#') Account 
+            li#mainNav
+              a(href='/api/signup') Sign up
+            li#mainNav
+              a(href='/api/signup/logout') Log out
       block content
           
   footer

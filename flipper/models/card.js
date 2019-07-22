@@ -71,6 +71,7 @@ function validateCard(card) {
     const schema = {
         deck: Joi.string(),
         question: Joi.string().min(1).max(500),
+        user: Joi.string(),
         answer: Joi.string().min(1).max(500),
         tags: Joi.string(),
         new: Joi.boolean(),

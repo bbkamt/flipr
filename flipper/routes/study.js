@@ -17,7 +17,8 @@ const router = express.Router();
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-const a = function ensureAuthenticated(req, res, next) {
+/*Middleware to authenticate the user for each GET/POST request */
+const ensureAuth = function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         next();
     } else {
@@ -25,8 +26,7 @@ const a = function ensureAuthenticated(req, res, next) {
         res.redirect("/login");
     }
 };
-
-router.use(a);
+router.use(ensureAuth);
 
 /* 
 Post request that will return the question side of a card that 
@@ -36,8 +36,8 @@ page.
 router.post('/q', async (req, res) => {
     // Clear any card with 'current' flag set to true
     let c = await Card.updateMany({ current: true }, { current: false });
-
-    let card = await Card.findOne({ user: req.username, deck: req.body.deck, due: true });
+    console.log(req.user.username);
+    let card = await Card.findOne({ user: req.user.username, deck: req.body.deck, due: true });
     if (!card) return res.render('finished')
     else {
         card.current = true; 
@@ -79,7 +79,7 @@ router.post('/a', async (req, res) => {
     console.log(card);
 
     // get next card and display 
-    card = await Card.findOne({ deck: card.deck, due: true });
+    card = await Card.findOne({ user: req.user.username, deck: card.deck, due: true });
     if (!card) return res.render('finished')
 
     else {
@@ -99,7 +99,7 @@ card being reviewed to the browser.
 */
 router.post('/decks', async (req, res) => {
 
-    let card = await Card.findOne({ deck: req.body.deck, due: true });
+    let card = await Card.findOne({ user: req.user.username, deck: req.body.deck, due: true });
     if (!card) return res.render('finished')
     else {
         card.current = true; 
