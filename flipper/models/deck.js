@@ -8,7 +8,7 @@ const Deck = mongoose.model('Deck', new mongoose.Schema({
        minlength: 1,
        maxlength: 50
    },
-   user: {
+   username: {
        type: String
    },
    name: {

@@ -11,6 +11,7 @@ const cards = require('./routes/cards');
 const decks = require('./routes/decks');
 const study = require('./routes/study');
 const users = require('./routes/users');
+const multiReview = require('./routes/multiReview');
 
 const app = express();
 
@@ -44,6 +45,7 @@ app.use('/api/cards', cards);
 app.use('/api/decks', decks);
 app.use('/api/study', study);
 app.use('/api/signup', users);
+app.use('/api/multireview', multiReview);
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {

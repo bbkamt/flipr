@@ -2,11 +2,11 @@
 Flow of requests 
 i) User is decks page, selects deck to study and POST /api/study/q is called
 ii) User is shown question of card, clicks to reveal answer and POST /api/study/decks is called
-iii) User is shown quesiton, answer, and buttons to rate card, and POST /api/study/a is called
+iii) User is shown question, answer, and buttons to rate card, and POST /api/study/a is called
 */
 
 const {Card, validate} = require('../models/card');
-const {ensureAuthenticated} = require('./users');
+const ensureAuthenticated = require('./users');
 const bodyParser = require('body-parser');
 const datetime = require('node-datetime');
 const express = require('express');
@@ -35,14 +35,14 @@ page.
 */
 router.post('/q', async (req, res) => {
     // Clear any card with 'current' flag set to true
-    let c = await Card.updateMany({ current: true }, { current: false });
+    let c = await Card.updateMany({ user: req.user.username, current: true }, { current: false });
     console.log(req.user.username);
     let card = await Card.findOne({ user: req.user.username, deck: req.body.deck, due: true });
     if (!card) return res.render('finished')
     else {
         card.current = true; 
         card = await card.save();
-        console.log(req.body);
+       
         res.render('studyQuestion', {
             Question: card.question,
             Deck: card.deck
@@ -62,9 +62,9 @@ router.post('/a', async (req, res) => {
     if (!card) {
         res.render('finished')
     }
-    console.log(req.body);
+    
     let q = req.body.difficulty;
-    console.log(q);
+    
 
     setDifficulty(card, q);
     setInterval(card);

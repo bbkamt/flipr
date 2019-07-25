@@ -1,5 +1,6 @@
 const {Card, validate} = require('../models/card');
 const {Deck, deckValidate} = require('../models/deck');
+const ensureAuthenticated = require('./users');
 const cards = require('../routes/cards');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -51,11 +52,11 @@ router.post('/', async (req, res) => {
     card = await card.save();
    
     // Check for existing deck, creates new deck if none found
-    let deck = await Deck.findOne({ name: card.deck });
+    let deck = await Deck.findOne({ name: card.deck, username: req.user.username });
     if (!deck) {
         deck = new Deck({
             name: card.deck,
-            user: req.user.username
+            username: req.user.username
         })
         deck = await deck.save();
     }

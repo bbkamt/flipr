@@ -18,7 +18,6 @@ const ensureAuth = function ensureAuthenticated(req, res, next) {
 };
 router.use(ensureAuth);
 
-
 /*
 GET request that returns a list of all decks owned by user.
 Updates the due dates for all cards in each deck. 
@@ -29,7 +28,7 @@ router.get('/', async (req, res) => {
 
     updateAllDue();
 
-    let decks = await Deck.find({ user: req.user.username }).sort({ name: 1 });
+    let decks = await Deck.find({ username: req.user.username }).sort({ name: 1 });
     if (!decks) return res.status(400).send('You don\'t have any decks. Create one and try again.');
     
     res.render('decks', {
@@ -52,7 +51,7 @@ router.post('/', async (req, res) => {
     deck = new Deck({ 
         userId: req.body.userId,
         user: req.user,
-        name: req.body.name,
+        username: req.body.name,
     });
     deck = await deck.save();
 
@@ -60,11 +59,13 @@ router.post('/', async (req, res) => {
 });
 
 /*
-Function to check all cards that are not due against today's date and update any that are due. 
+Function to check all cards that are not due against today's date and update any that are due.
 */
 async function updateAllDue(){
     const date = parseInt(datetime.create().format('Ymd'));
     const res = await Card.updateMany({ due: false, dueDate: {$lte: date } }, { due: true });
 }
+
+
 
 module.exports = router; 
