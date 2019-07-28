@@ -47,7 +47,6 @@ router.get('/', async (req, res) => {
 });
         
         
-
 router.post('/a', async (req, res) => {
     let card = await Card.findOne({ current: true });
     if (!card) {
@@ -85,6 +84,24 @@ router.post('/a', async (req, res) => {
             Deck: card.deck
         })
     }
+});
+
+
+/* 
+Get all cards that have been reviewed by user in a multiReview 
+and send the array of cards to be rendered by html 
+*/
+router.get('/review', async (req, res) => {
+    let mr = await MultiReview.findOne({ 
+        username: req.user.username
+    });
+    if (!mr) {
+        res.render('finished')
+    }
+
+    res.render('multiStudyReview', {
+        cards: mr.cards
+    });
 });
 
 module.exports = router;

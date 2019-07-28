@@ -13,7 +13,7 @@ const ensureAuth = function ensureAuthenticated(req, res, next) {
         next();
     } else {
         req.flash("info", "You must be logged in to see this page.");
-        res.redirect("/login");
+        res.redirect("/");
     }
 };
 router.use(ensureAuth);

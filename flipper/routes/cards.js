@@ -12,9 +12,7 @@ const router = express.Router();
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-router.get('/', (req, res) => {
-    res.render('addCard');
-})
+
 
 /*Middleware to authenticate the user for each GET/POST request */
 const ensureAuth = function ensureAuthenticated(req, res, next) {
@@ -22,10 +20,14 @@ const ensureAuth = function ensureAuthenticated(req, res, next) {
         next();
     } else {
         req.flash("info", "You must be logged in to see this page.");
-        res.redirect("/login");
+        res.redirect("/");
     }
 };
 router.use(ensureAuth);
+
+router.get('/', (req, res) => {
+    res.render('addCard');
+})
 
 /*
 POST request to add card.
@@ -34,6 +36,7 @@ and creates card.
 If no deck exists with specified name, a new deck is created. 
 */
 router.post('/', async (req, res) => {
+    console.log("here");
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 

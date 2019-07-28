@@ -1,0 +1,29 @@
+doctype html 
+html 
+    head
+    link(rel='stylesheet', href='/css/style.css')
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    
+    body 
+    div.split.left 
+        div.centered 
+            h1 Flipper.
+    div.split.right 
+        header.welcomeNav 
+            a(href='/api/signup').welcomeNav Register 
+    
+        div.centered 
+            div.welcomeSignIn 
+                div.container
+                    h3
+                        | Sign in 
+                div.container
+                    form(method='post' action='/api/signup/login')
+                        div.form-group
+                            label#form-control(for="username") Username: <br>
+                                input#username.form-control(input name="username" type='text', placeholder='Your username')
+                        div.form-group
+                            label#form-control(for="password") Password: <br>
+                                input#password.form-control(input name="password" type='password', placeholder='Your password')
+                        button.btn.btn-primary(type='submit') Sign in  
+                

@@ -1,0 +1,19 @@
+extends default
+
+block content
+  div.deckContainer
+    h3.deckContainer.pageTitle
+        | Review 
+    p.container.subHeading Here are the cards to review 
+    p Please mark each card with the appropriate rating for how difficult you found it <br>
+    <br>
+    form(method='post' action='/api/study/q')
+        each item in cards 
+            ol#DeckList 
+                li Front: #{item.question} Back: #{item.answer} <br>
+                    <input type="checkbox" name="difficulty" value="0"> 0
+                    <input type="checkbox" name="difficulty" value="0"> 1
+                    <input type="checkbox" name="difficulty" value="0"> 2
+                    <input type="checkbox" name="difficulty" value="0"> 3
+
+    

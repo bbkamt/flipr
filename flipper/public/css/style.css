@@ -36,6 +36,68 @@ body {
 }
 
 
+/* Welcome page 
+   ========================================================================== */
+.left-half {
+  background-color: #66a9c9;
+  height: 100%;
+  width: 50%; 
+}
+
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+/* Control the left side */
+.left {
+  left: 0;
+  background-color: #66a9c9;
+  color: #FFFFFF;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Control the right side */
+.right {
+  right: 0;
+  background-color: #FFFFFF;
+}
+
+/* If you want the content centered horizontally and vertically */
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60%;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.welcomeSignIn {
+  text-align: left;
+  border-radius: 5px;
+  background-color: #d2e7f1;
+  width: 100%;
+  padding-bottom: 25px;
+}
+
+.welcomeNav {
+  text-align: right;
+  margin-right: 5%;
+  font-size: 110%;
+  text-decoration: none; 
+}
+.welcomeNav:hover {
+  color: #66a9c9;;
+}
+
+
+
 
 /* Header
    ========================================================================== */
@@ -130,17 +192,16 @@ body {
     /* border: 3px solid #66a9c9; */
     height: 75px;
     line-height: 25px;
-    width: 100%;
+    width: 200%;
     text-decoration: none;
     text-align: left;
+    padding-top: 10px;
     padding-left: 20px;
     padding-right: 20px;
-    font-size: 20px
+    padding-bottom: 10px;
+    font-size: 20px;
    }
 
-   .form-control {
-     padding-left: 5px;
-   }
 
 /* Homepage Container
    ========================================================================== */
@@ -156,8 +217,12 @@ body {
   margin: 0 auto;
   padding: 12px 12px 12px 12px;
   display: inline-block;
-  
 }
+
+.wrap {
+  width: 100%;
+  }
+  
 
 /* Homepage main area 
    ========================================================================== */
@@ -232,11 +297,18 @@ body {
 #question {
   text-align: center;
   padding-top: 10%;
+  padding-bottom: 10%;
 }
 
 #answer {
   text-align: center;
   padding-top: 10%;
+  padding-bottom: 10%;
+}
+
+.finishedMessage {
+  text-align: center;
+  margin-top: 10%
 }
   
 

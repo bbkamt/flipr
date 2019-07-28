@@ -5,6 +5,7 @@ block content
     h3#pageTitle 
         | #{Deck}
     p#question #{Question}
+    hr
     p#answer #{Answer}
     form(method='post' action='/api/study/a')
         // name section of the buttons below is passed in body of html request 

@@ -91,16 +91,16 @@ router.get("/", async (req, res) => {
 });
 
 
-let x = function ensureAuthenticated(req, res, next) {
+let ensureAuth = function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         next();
     } else {
         req.flash("info", "You must be logged in to see this page.");
-        res.redirect("/login");
+        res.redirect("/");
         next();
     }
 };
 
-exports.ensureAuthenticated = x;
+exports.ensureAuthenticated = ensureAuth;
 module.exports = router;
 

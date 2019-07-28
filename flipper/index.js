@@ -27,7 +27,6 @@ mongoose.set('useCreateIndex', true);
 
 app.set('view engine', 'pug');
 app.use(express.json());
-
 // User bodyParser to get data from html form
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -49,7 +48,7 @@ app.use('/api/multireview', multiReview);
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {
-    res.render('index');
+    res.render('welcome');
 })
 
 const port = process.env.PORT || 3000;

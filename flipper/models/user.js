@@ -51,16 +51,7 @@ function hashPassword(password){
   return pw;
 }
 
-// userSchema.methods.checkPassword = function(guess, done) {
-//   bcrypt.compare(guess, this.password, function(err, isMatch){
-//     done(err, isMatch);
-//   });
-// };
 
-userSchema.methods.generateAuthToken = function() {
-  const token = jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'));
-  return token;
-}
 
 userSchema.methods.checkPassword = function(guess, done) {
   bcrypt.compare(guess, this.password, function(err, isMatch) {
@@ -89,4 +80,17 @@ function validateUser(user) {
 exports.User = User; 
 exports.validate = validateUser;
 exports.hashPassword = hashPassword;
-// exports.checkPassword = checkPassword;
+
+
+// NOT IN USE 
+
+// userSchema.methods.checkPassword = function(guess, done) {
+//   bcrypt.compare(guess, this.password, function(err, isMatch){
+//     done(err, isMatch);
+//   });
+// };
+
+// userSchema.methods.generateAuthToken = function() {
+//   const token = jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'));
+//   return token;
+// }
