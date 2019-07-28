@@ -36,6 +36,38 @@ router.get('/', async (req, res) => {
     });
 });
 
+/*
+POST request to render information about each deck into deckInfo page 
+shows:
+- total number of cards in deck 
+- number of cards that are due 
+*/
+router.post('/info', async (req, res) => {
+    
+    // find appropriate deck 
+    let deck = await Deck.findOne({ username: req.user.username, name: req.body.deck });
+    if (!deck) return res.status(400).send('No deck with that name');
+    
+    else {
+        // aggregate info about deck 
+        let totalCards = await Card.countDocuments({ deck: req.body.deck }, function(err, count){
+            return count;
+        });
+        let dueCards = await Card.countDocuments({ deck: deck.name, due: true}, function(err, count){
+            return count;
+        });
+        
+        // render relevant information into page 
+        res.render('deckInfo', {
+            Deck: deck.name,
+            totalCards: totalCards,
+            dueCards: dueCards
+        })
+    }
+
+
+});
+
 /* 
 POST request to create a new deck. 
 *** DECK CREATION HANDLED UNDER CARDS.JS ROUTE WHEN NEW CARD CREATED *** 

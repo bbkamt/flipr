@@ -5,7 +5,7 @@ block content
     h3.deckContainer.pageTitle
         | Decks 
     p.container.subHeading Select one to study 
-    form(method='post' action='/api/study/q')
+    form(method='post' action='/api/decks/info')
       ul 
         each item in deck
             ol#DeckList 

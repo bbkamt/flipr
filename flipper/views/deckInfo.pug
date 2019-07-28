@@ -1,0 +1,11 @@
+extends default
+
+block content
+  div.deckContainer
+    h3
+        | This is your deck: #{Deck}
+    p Total number of cards: #{totalCards}
+    p Cards due today: #{dueCards}
+
+    form(method='post' action='/api/study/q')
+        button.btn.btn.decks(type='submit', name='deck', value=Deck) Study
