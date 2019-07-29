@@ -27,12 +27,12 @@ Post request that will return the question side of a card that
 is due to be reviewed from the deck selected by the user from the decks
 page. 
 */
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
     // Clear any card with 'current' flag set to true
     let c = await Card.updateMany({ user: req.user.username, current: true }, { current: false });
     
     // Get due card 
-    let card = await Card.findOne({ user: req.user.username, due: true });
+    let card = await Card.findOne({ user: req.user.username, deck: req.body.deck, due: true });
     if (!card) return res.render('finished');
     else {
         // set to current 
@@ -50,10 +50,10 @@ router.get('/', async (req, res) => {
 router.post('/a', async (req, res) => {
     let card = await Card.findOne({ current: true });
     if (!card) {
-        res.render('finished')
-    }
+        res.render('finished');
+    };
     // create multiReview document for user if one doesn't exist
-    let mr = await MultiReview.findOne({ 
+    mr = await MultiReview.findOne({ 
         username: req.user.username
     });
     console.log(req.user.username);
@@ -74,7 +74,20 @@ router.post('/a', async (req, res) => {
 
     // get next card and display 
     card = await Card.findOne({ user: req.user.username, due: true });
-    if (!card) return res.render('finished')
+    if (!card) {
+        let mr = await MultiReview.findOne({ 
+            username: req.user.username
+        });
+        console.log(mr);
+        if (mr) {
+            res.render('multiStudyReview', {
+                cards: mr.cards
+            });
+        }
+        else {
+            return res.render('finished')
+        }
+    }
 
     else {
         card.current = true; 
@@ -86,6 +99,50 @@ router.post('/a', async (req, res) => {
     }
 });
 
+router.post('/q', async (req, res) => {
+    
+    // get array of review scores 
+    let scores = req.body.difficulty;
+    console.log(scores);
+
+    // get array of cards that have been reviewed 
+    let mr = await MultiReview.findOne({ 
+        username: req.user.username
+    });
+    let cards = mr.cards;
+    console.log(cards.length);
+
+    for (card in cards){
+        let q = scores[card];
+        console.log(cards[card].question);
+        let c = await Card.findOne({user: req.user.username, question: cards[card].question});
+        if (!c) break; 
+        console.log(q);
+        setDifficulty(c, q);
+        setInterval(c);
+        setDueDate(c);
+        setCorrectCount(c, q);
+        setCount(c);
+        setNew(c);
+        setDue(c, q);
+        setCurrent(c);
+    
+        c = await c.save();
+    }
+
+    mr = await MultiReview.deleteOne({ username: req.user.username });
+
+    res.render('finished')
+
+
+
+    // for (item in req.body.difficulty){
+    //     console.log(req.body.difficulty[item]);
+    // }
+
+
+    
+})
 
 /* 
 Get all cards that have been reviewed by user in a multiReview 
@@ -97,7 +154,7 @@ router.get('/review', async (req, res) => {
     });
     if (!mr) {
         res.render('finished')
-    }
+    };
 
     res.render('multiStudyReview', {
         cards: mr.cards
@@ -105,3 +162,57 @@ router.get('/review', async (req, res) => {
 });
 
 module.exports = router;
+
+
+function setDifficulty(card, q) {
+    card.difficulty = card.difficulty + (0.1-(3-q) * (0.08+(3-q) * 0.02));
+    if (card.difficulty < 1.3) {
+        card.difficulty = 1.3;
+    }
+}
+
+function setInterval(card){
+    if (card.count === 0){
+        card.interval = 1;
+    }
+    else if (card.count === 1) {
+        card.interval = 6;
+    }
+    else {
+        card.interval = (card.count-1) * (card.difficulty * card.correctCount);
+    }
+}
+
+function setDueDate(card){
+    let date = parseInt(datetime.create().format('Ymd'));
+        date+= card.interval;
+        card.dueDate = date;
+}
+
+function setCorrectCount(card, q){
+    if (q != 0) {
+        card.correctCount++;
+    }
+    else {
+        card.correctCount = 0;
+    }
+}
+
+function setCount(card){
+    card.count++;
+}
+
+function setNew(card){
+    if (card.new = true) {
+        card.new = false;
+    }
+}
+
+function setDue(card, q){
+    if (q == 0) card.due = true;
+    else card.due = false; 
+}
+
+function setCurrent(card){
+    card.current = false;
+}
