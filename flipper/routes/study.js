@@ -37,9 +37,11 @@ router.post('/q', async (req, res) => {
     // Clear any card with 'current' flag set to true
     let c = await Card.updateMany({ user: req.user.username, current: true }, { current: false });
     console.log(req.user.username);
-    let card = await Card.findOne({ user: req.user.username, deck: req.body.deck, due: true });
-    if (!card) return res.render('finished')
+    let card = await Card.find({ user: req.user.username, deck: req.body.deck, due: true });
+    if (card.length === 0) return res.render('finished')
     else {
+        let index = Math.floor((Math.random() * card.length) + 1)-1;
+        card = card[index];
         card.current = true; 
         card = await card.save();
        
@@ -79,10 +81,15 @@ router.post('/a', async (req, res) => {
     console.log(card);
 
     // get next card and display 
-    card = await Card.findOne({ user: req.user.username, deck: card.deck, due: true });
-    if (!card) return res.render('finished')
 
+    card = await Card.find({ user: req.user.username, deck: card.deck, due: true });
+    if (card.length === 0) return res.render('finished')
     else {
+   
+        let index = Math.floor((Math.random() * card.length) + 1)-1;
+      
+        card = card[index];
+ 
         card.current = true; 
         card = await card.save();
         res.render('studyQuestion', {
@@ -99,7 +106,7 @@ card being reviewed to the browser.
 */
 router.post('/decks', async (req, res) => {
 
-    let card = await Card.findOne({ user: req.user.username, deck: req.body.deck, due: true });
+    let card = await Card.findOne({ user: req.user.username, deck: req.body.deck, current: true });
     if (!card) return res.render('finished')
     else {
         card.current = true; 
