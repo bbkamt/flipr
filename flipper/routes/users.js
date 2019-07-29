@@ -40,7 +40,9 @@ router.post('/', async (req, res) => {
     });
 
     newUser = await newUser.save();
-    res.send(newUser);
+    res.render('decks', {
+        deck: ["You don't have any decks yet. Please create some cards to get started."]
+    });
     
 });
 

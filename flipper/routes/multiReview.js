@@ -73,7 +73,7 @@ router.post('/a', async (req, res) => {
     card = await card.save();
 
     // get next card and display 
-    card = await Card.findOne({ user: req.user.username, deck: req.body.deck, due: true });
+    card = await Card.findOne({ user: req.user.username, deck: card.deck, due: true });
     if (!card) {
         let mr = await MultiReview.findOne({ 
             username: req.user.username
@@ -133,15 +133,6 @@ router.post('/q', async (req, res) => {
     mr = await MultiReview.deleteOne({ username: req.user.username });
 
     res.render('finished')
-
-
-
-    // for (item in req.body.difficulty){
-    //     console.log(req.body.difficulty[item]);
-    // }
-
-
-    
 })
 
 /* 
