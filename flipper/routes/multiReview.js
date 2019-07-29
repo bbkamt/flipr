@@ -73,7 +73,7 @@ router.post('/a', async (req, res) => {
     card = await card.save();
 
     // get next card and display 
-    card = await Card.findOne({ user: req.user.username, due: true });
+    card = await Card.findOne({ user: req.user.username, deck: req.body.deck, due: true });
     if (!card) {
         let mr = await MultiReview.findOne({ 
             username: req.user.username
@@ -184,9 +184,10 @@ function setInterval(card){
 }
 
 function setDueDate(card){
-    let date = parseInt(datetime.create().format('Ymd'));
-        date+= card.interval;
-        card.dueDate = date;
+    let date = datetime.create();
+    date.offsetInDays(card.interval);
+    date = parseInt(date.format('Ymd'));
+    card.dueDate = date;
 }
 
 function setCorrectCount(card, q){

@@ -168,9 +168,10 @@ function setInterval(card){
 }
 
 function setDueDate(card){
-    let date = parseInt(datetime.create().format('Ymd'));
-        date+= card.interval;
-        card.dueDate = date;
+    let date = datetime.create();
+    date.offsetInDays(card.interval);
+    date = parseInt(date.format('Ymd'));
+    card.dueDate = date;
 }
 
 function setCorrectCount(card, q){
