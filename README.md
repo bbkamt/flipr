@@ -18,11 +18,13 @@ flipr is being developed using:
 
 ### Installation 
 Use the Node Package Manager to install the relevant modules 
-$ npm install 
-
+...
+npm install 
+...
 flipr can then run as a local site: 
-$ node index.js 
-
+...
+node index.js 
+...
 And you can access the pages at localhost:3000 
 
 
