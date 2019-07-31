@@ -81,7 +81,6 @@ router.post('/a', async (req, res) => {
     console.log(card);
 
     // get next card and display 
-
     card = await Card.find({ user: req.user.username, deck: card.deck, due: true });
     if (card.length === 0) return res.render('finished')
     else {

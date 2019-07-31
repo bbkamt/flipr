@@ -53,7 +53,7 @@ router.post('/a', async (req, res) => {
         res.render('finished');
     };
     // create multiReview document for user if one doesn't exist
-    mr = await MultiReview.findOne({ 
+    let mr = await MultiReview.findOne({ 
         username: req.user.username
     });
     console.log(req.user.username);

@@ -15,7 +15,7 @@ const multiReview = require('./routes/multiReview');
 
 const app = express();
 
-mongoose.connect('mongodb://localhost/mempro', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost/flipr', { useNewUrlParser: true })
     .then(() => console.log('Connected to MongoDB...'))
     .catch(err => console.error('Could not connect to MongoDB...'));
 setUpPassport();

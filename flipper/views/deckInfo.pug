@@ -2,12 +2,21 @@ extends default
 
 block content
   div.deckContainer
+    p <br>
     h3
-        | This is your deck: #{Deck}
+        | #{Deck}
+    p <br>
     p Total number of cards: #{totalCards}
     p Cards due today: #{dueCards}
-
+    p <br>
+    p <br>
     form(method='post' action='/api/study/q')
         button.btn.btn.decks(type='submit', name='deck', value=Deck) Study
     form(method='post' action='/api/multireview')
-        button.btn.btn.decks(type='submit', name='deck', value=Deck) Multi Review
+        button.btn.btn.decks(type='submit', name='deck', value=Deck) Multi Review 
+    p <br>
+    p <br>
+    p <br> 
+    p Study shows you the front and back of each card in turn, asking you grade it immediately. 
+    p <br>
+    p Multi Review will show you the front of each card due to be studied, and then you can check your answers and assign a score at the end.
