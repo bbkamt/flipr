@@ -1,7 +1,7 @@
 # flipr
 A flashcard web application based on the idea of spaced-repetition that allows you to create and review decks of flashcards. 
 
-flipr has a custom method that allows you to grade how well they know the material when reviewing the cards, and then uses this information to determine when to show you the cards again.
+flipr has a custom method that allows you to grade how well you know the material when reviewing cards, and then uses this information to determine when to show you the cards again.
 
 It also incorporates two methods of study that have shown to improve recall across several studies: Multiple choice, and delayed review. With multiple choice will use information from other cards in your decks to generate multiple options, and with delayed review, flipr will delay showing you the reverse of each card until a later point, when you can review everything and grade them in bulk. 
 
