@@ -17,15 +17,21 @@ const Deck = mongoose.model('Deck', new mongoose.Schema({
        minlength: 1,
        maxlength: 50
    },
+   cardsNumber: {
+       type: Number,
+       min: 0
+   },
    cards: {
        type: Array
    }
+
 }));
 
 function validateDeck(Deck) {
     const schema = {
         userId: Joi.string().min(1).max(50),
-        name: Joi.string().min(1).max(50)
+        name: Joi.string().min(1).max(50),
+        cardsNumber: Joi.number()
     };
     
     return Joi.validate(Deck, schema);

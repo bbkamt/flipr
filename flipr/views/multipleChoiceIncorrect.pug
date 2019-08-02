@@ -1,0 +1,15 @@
+extends default
+
+block content
+  div.reviewContainer
+    h3#pageTitle 
+        | #{Deck}
+    p#question #{Question}
+    p#answer Your answer was #{wrongAnswer}
+
+    p#answer The correct answer was #{Answer}
+
+    form(method='post' action='/api/multiplechoice/q')
+        // name section of the buttons below is passed in body of html request 
+        // can be accessed in .get and .post etc as req.body.NAME 
+        button.btn.btn-review(type='submit', name='difficulty', value='0') Next
