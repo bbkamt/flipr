@@ -7,17 +7,20 @@ const passport = require('passport');
 const session = require('express-session');
 const setUpPassport = require('./setuppassport');
 
+
 const cards = require('./routes/cards');
 const decks = require('./routes/decks');
 const study = require('./routes/study');
 const users = require('./routes/users');
 const multiReview = require('./routes/multiReview');
 const multipleChoice = require('./routes/multipleChoice');
+const config = require('config');
 
 const app = express();
+const db = config.get('db');
 
-mongoose.connect('mongodb://localhost/flipr', { useNewUrlParser: true })
-    .then(() => console.log('Connected to MongoDB...'))
+mongoose.connect(db, { useNewUrlParser: true })
+    .then(() => console.log(`Connected to ${db}...`))
     .catch(err => console.error('Could not connect to MongoDB...'));
 setUpPassport();
 
@@ -54,7 +57,9 @@ app.get('/', (req, res) => {
 })
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Listening on port ${port}...`));
+const server = app.listen(port, () => console.log(`Listening on port ${port}...`));
+
+module.exports = server; 
 
 // app.get('/api/deck', async (req, res) => {
 //     const { error } = validate(req.body);

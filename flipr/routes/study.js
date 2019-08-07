@@ -12,6 +12,7 @@ const datetime = require('node-datetime');
 const express = require('express');
 const passport = require('passport');
 const router = express.Router();
+const functions = require('./functions');
 
 // User bodyParser to get data from html form
 router.use(bodyParser.json());
@@ -66,16 +67,14 @@ router.post('/a', async (req, res) => {
     }
     
     let q = req.body.difficulty;
-    
-
-    setDifficulty(card, q);
-    setInterval(card);
-    setDueDate(card);
-    setCorrectCount(card, q);
-    setCount(card);
-    setNew(card);
-    setDue(card, q);
-    setCurrent(card);
+    functions.setDifficulty(card, q);
+    functions.setInterval(card);
+    functions.setDueDate(card);
+    functions.setCorrectCount(card, q);
+    functions.setCount(card);
+    functions.setNew(card);
+    functions.setDue(card, q);
+    functions.setCurrent(card);
     
     card = await card.save();
     console.log(card);
@@ -126,7 +125,7 @@ Get request - not currently in use.
 router.get('/', async (req, res) => {
     
     // Move this function call to a separate button on decks page 
-    updateAllDue();
+    functions.updateAllDue();
 
     let card = await Card.findOne({ due: true });
     if (!card) return res.render('finished')
@@ -143,6 +142,7 @@ router.get('/', async (req, res) => {
 
 
 module.exports = router;
+
 
 
 /* 
@@ -207,3 +207,4 @@ function setDue(card, q){
 function setCurrent(card){
     card.current = false;
 }
+
