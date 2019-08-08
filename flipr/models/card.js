@@ -62,7 +62,6 @@ const cardSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     }
-
 });
 
 const Card = mongoose.model("Card", cardSchema);

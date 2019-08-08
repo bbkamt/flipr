@@ -46,7 +46,7 @@ router.post('/', async (req, res) => {
     
     // Create card and save 
     card = new Card({ 
-        deck: req.body.deck,
+        deck: req.body.deck.trim(),
         question: req.body.question,
         user: req.user.username,
         answer: req.body.answer,
