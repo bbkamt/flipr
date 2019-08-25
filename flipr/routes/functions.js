@@ -17,10 +17,16 @@ function setInterval(card){
         card.interval = 1;
     }
     else if (card.count === 1) {
-        card.interval = 6;
+        card.interval = 4;
     }
     else {
-        card.interval = (card.count-1) * (card.difficulty * card.correctCount);
+        if (card.correctCount === 0){
+            card.interval = (card.count-1) * (card.difficulty);
+        }
+        else{
+            card.interval = (card.count-1) * (card.difficulty * card.correctCount);
+        }
+        
     }
 }
 

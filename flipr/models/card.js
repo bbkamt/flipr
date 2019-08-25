@@ -13,14 +13,14 @@ const cardSchema = new mongoose.Schema({
     question: {
         type: String, 
         minlength: 1, 
-        maxlength: 500,
+        maxlength: 1000,
         unique: true, 
         required: true
     },
     answer: {
         type: String, 
         minlength: 1, 
-        maxlength: 500
+        maxlength: 1000
     },
     tags: {
         type: String

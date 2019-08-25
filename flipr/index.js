@@ -14,6 +14,7 @@ const study = require('./routes/study');
 const users = require('./routes/users');
 const multiReview = require('./routes/multiReview');
 const multipleChoice = require('./routes/multipleChoice');
+const upload = require('./routes/upload');
 const config = require('config');
 
 const app = express();
@@ -50,6 +51,7 @@ app.use('/api/study', study);
 app.use('/api/signup', users);
 app.use('/api/multireview', multiReview);
 app.use('/api/multipleChoice', multipleChoice);
+app.use('/api/upload', upload);
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {

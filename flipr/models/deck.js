@@ -21,10 +21,6 @@ const Deck = mongoose.model('Deck', new mongoose.Schema({
        type: Number,
        min: 0
    },
-   cards: {
-       type: Array
-   }
-
 }));
 
 function validateDeck(Deck) {

@@ -61,7 +61,7 @@ the updated information and returns the next card due to be reviewed.
 router.post('/a', async (req, res) => {
     // const { error } = validate(req.body);
     // if (error) return res.status(400).send(error.details[0].message);
-    let card = await Card.findOne({ current: true });
+    let card = await Card.findOne({ user: req.user.username, current: true });
     if (!card) {
         res.render('finished')
     }
@@ -127,7 +127,7 @@ router.get('/', async (req, res) => {
     // Move this function call to a separate button on decks page 
     functions.updateAllDue();
 
-    let card = await Card.findOne({ due: true });
+    let card = await Card.findOne({ user: req.user.username, due: true });
     if (!card) return res.render('finished')
     else {
         card.current = true; 
