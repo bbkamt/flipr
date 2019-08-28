@@ -1,16 +1,13 @@
 const {Card, validate} = require('../models/card');
 const {Deck, deckValidate} = require('../models/deck');
 const ensureAuthenticated = require('./users');
-const cards = require('../routes/cards');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 const csv = require('fast-csv');
-const multer = require('multer');
-const upload = multer({ dest: '/tmp/'});
 const fs = require('fs'); 
-var fileUpload = require('express-fileupload');
+const fileUpload = require('express-fileupload');
+
 
 // User bodyParser to get data from html form
 router.use(bodyParser.json());
@@ -47,13 +44,18 @@ router.post('/', async (req, res) => {
         for (let row = parser.read(); row; row = parser.read()) {
                 console.log(row);
                 // Create card and save 
-                card = new Card({ 
-                    deck: row[0].trim(),
-                    question: row[1],
-                    user: req.user.username,
-                    answer: row[2],
-                });
-                card = await card.save();
+                try{
+                    card = new Card({ 
+                        deck: row[0].trim(),
+                        question: row[1],
+                        user: req.user.username,
+                        answer: row[2],
+                    });
+                    card = await card.save();
+                } catch(err){
+                    console.log(err);
+                }
+                
             
                 // Check for existing deck, creates new deck if none found
                 let deck = await Deck.findOne({ name: card.deck, username: req.user.username });
@@ -71,14 +73,8 @@ router.post('/', async (req, res) => {
             console.log(`Parsed ${rowCount} rows`);
             console.log(cardCount);
             res.render('uploadSuccess', {
-            cards: cardCount
+                cards: cardCount
         })});
-        
-        
-
 });
-
-
-
     
 module.exports = router;

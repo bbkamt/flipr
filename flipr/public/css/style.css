@@ -84,6 +84,7 @@ body {
   background-color: #d2e7f1;
   width: 100%;
   padding-bottom: 25px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .welcomeNav {
@@ -180,6 +181,10 @@ body {
      padding-bottom: 25px;
    }
 
+   .signInPrompt {
+     padding-left:30%
+   }
+
    .welcomeText {
     float: left;  
     height: 300px;
@@ -190,6 +195,7 @@ body {
     vertical-align: middle;
     border-right: 2px solid black;
    }
+   
 
    .form-group {
     /* border: 3px solid #66a9c9; */
@@ -281,12 +287,16 @@ body {
   list-style-type: lower-alpha;
 }
 
+.studyOptions {
+  font-size: 15px;
+}
+
 
 /* Deck page 
    ========================================================================== */
 
 .reviewContainer {
-  width: 40%;
+  width: 43%;
   margin-top: 1%;
   margin-left: 30%; 
   margin-right: 30%;
@@ -323,12 +333,18 @@ body {
   height: 40px;
   line-height: 40px;
   width: 125px;
+  color: white;
   text-decoration: none;
   text-align: center;
   font-size: 15px;
   border-radius: 5px;
   border: 2px solid #66a9c9;
-  background-color: white;
+  background-color: rgb(40, 149, 182);
+  opacity: 0.6;
+}
+
+.btn-primary:hover {
+  opacity: 1;
 }
 
 .btn.main:hover {
@@ -341,6 +357,8 @@ body {
   padding: 0 !important; 
   text-decoration: underline; 
   text-align: left;
+  background-color: rgb(255, 255, 255);
+  color: black;
 }
 
 .btn.decks:hover {
@@ -361,6 +379,12 @@ body {
   margin-left: 40%;
   margin-right: 40%;
   margin-top: 25%;
-  
 }
 
+.btnContainer {
+  width: 80%;
+  margin-top: 1%;
+  margin-left: 12%; 
+  margin-right: 10%;
+  display: inline-block;
+}

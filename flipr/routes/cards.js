@@ -6,7 +6,12 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
+const dotenv = require('dotenv').config();
 
+
+const fileUpload = require('express-fileupload');
+router.use(fileUpload());
+const AWS = require('aws-sdk');
 
 // User bodyParser to get data from html form
 router.use(bodyParser.json());
@@ -36,6 +41,7 @@ and creates card.
 If no deck exists with specified name, a new deck is created. 
 */
 router.post('/', async (req, res) => {
+    console.log(req.files);
     console.log("here");
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -43,25 +49,72 @@ router.post('/', async (req, res) => {
     // Check for existing card in user's decks
     let card = await Card.findOne({ user: req.user.username, deck: req.body.deck, question: req.body.question });
     if (card) return res.status(400).send('Card with same question already registered in that deck.');
-    
-    // Create card and save 
-    card = new Card({ 
-        deck: req.body.deck.trim(),
-        question: req.body.question,
-        user: req.user.username,
-        answer: req.body.answer,
-        tags: req.body.tags
-    });
-    card = await card.save();
+
+    if (!req.files){
+        // Create card and save 
+        card = new Card({ 
+            deck: req.body.deck.trim(),
+            question: req.body.question,
+            user: req.user.username,
+            answer: req.body.answer,
+            tags: req.body.tags
+        });
+        card = await card.save();
    
-    // Check for existing deck, creates new deck if none found
-    let deck = await Deck.findOne({ name: card.deck, username: req.user.username });
-    if (!deck) {
-        deck = new Deck({
-            name: card.deck,
-            username: req.user.username
-        })
-        deck = await deck.save();
+        // Check for existing deck, creates new deck if none found
+        let deck = await Deck.findOne({ name: card.deck, username: req.user.username });
+        if (!deck) {
+            deck = new Deck({
+                name: card.deck,
+                username: req.user.username
+            })
+            deck = await deck.save();
+        }
+    }
+    else {
+        let s3bucket = new AWS.S3({
+            accessKeyId: process.env.AWSAccessKeyId, 
+            secretAccessKey: process.env.AWSSecretKey,
+            region: process.env.region
+          });
+        
+        console.log(req.files.name.data)
+    
+        var params = {
+            Bucket: "flipr",
+            Key: req.files.name.name,
+            Body: req.files.name.data,
+            ContentType: req.files.name.mimetype,
+            ACL: "public-read"
+        };
+        s3bucket.upload(params, async function(err, data) {
+            if (err) {
+              res.status(500).json({ error: true, Message: err });
+            } else {
+                // Create card and save 
+                card = new Card({ 
+                    deck: req.body.deck.trim(),
+                    question: req.body.question,
+                    user: req.user.username,
+                    answer: req.body.answer,
+                    questionURL: data.Location,
+                    tags: req.body.tags
+                });
+                card = await card.save();
+                console.log(data);
+                console.log("card saved");
+                // Check for existing deck, creates new deck if none found
+                let deck = await Deck.findOne({ name: card.deck, username: req.user.username });
+                if (!deck) {
+                    deck = new Deck({
+                        name: card.deck,
+                        username: req.user.username
+                    })
+                    deck = await deck.save();
+                }
+              //res.send({ data });
+              };
+        });
     }
     
     // Reload add card page 

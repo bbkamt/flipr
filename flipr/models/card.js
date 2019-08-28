@@ -22,6 +22,9 @@ const cardSchema = new mongoose.Schema({
         minlength: 1, 
         maxlength: 1000
     },
+    questionURL: {
+        type: String
+    },
     tags: {
         type: String
     },

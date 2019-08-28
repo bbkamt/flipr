@@ -1,9 +1,11 @@
-extends default
+extends default_register
 
 block content
   div.container
     h3.pageTitle
-        | Signup 
+        | Register
+    p.signInPrompt Already have an account? 
+      a(href='/' class="w3-bar-item w3-button") Sign in 
   div.addFormGroup
     form(method='post' action='/api/signup')
       div.addFormGroup 
@@ -16,3 +18,4 @@ block content
         label(for="password") Email: <br>
         input#front.form-control(input name="email" type='text', placeholder='Email address')
       button.btn.btn-primary(type='submit') Signup 
+      

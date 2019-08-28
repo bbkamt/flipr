@@ -5,7 +5,11 @@ const multiReviewSchema = new mongoose.Schema({
     username: {
         type: String
     },
-    cards: [cardSchema]
+    cards: [cardSchema], 
+    count: {
+        type: Number, 
+        default: 0
+    }
 });
 
 const MultiReview = mongoose.model("MultiReview", multiReviewSchema);

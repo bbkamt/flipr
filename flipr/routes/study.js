@@ -48,7 +48,8 @@ router.post('/q', async (req, res) => {
        
         res.render('studyQuestion', {
             Question: card.question,
-            Deck: card.deck
+            Deck: card.deck,
+            URL: card.questionURL
         })
     }
 })
@@ -92,7 +93,8 @@ router.post('/a', async (req, res) => {
         card = await card.save();
         res.render('studyQuestion', {
             Question: card.question,
-            Deck: card.deck
+            Deck: card.deck,
+            URL: card.questionURL
         })
     }
 });

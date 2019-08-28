@@ -54,7 +54,7 @@ router.post('/a', async (req, res) => {
     };
     // create multiReview document for user if one doesn't exist
     let mr = await MultiReview.findOne({ 
-        username: req.user.username
+        username: req.user.username,
     });
     console.log(req.user.username);
     if (!mr){
@@ -64,6 +64,8 @@ router.post('/a', async (req, res) => {
     }
     // save current card as subdocument in multiReview document
     mr.cards.push(card);
+    mr.count++;
+    console.log(mr);
     mr = await mr.save();
     card.current = false;
     car = await card.save();
@@ -73,10 +75,13 @@ router.post('/a', async (req, res) => {
     card = await card.save();
 
     // get next card and display 
-    card = await Card.findOne({ user: req.user.username, deck: card.deck, due: true });
-    if (!card) {
-        let mr = await MultiReview.findOne({ 
-            username: req.user.username
+    mr = await MultiReview.findOne({
+        username: req.user.username, 
+        count: { $lt: 10 }
+    })
+    if (!mr) {
+        mr = await MultiReview.findOne({ 
+            username: req.user.username, 
         });
         console.log(mr);
         if (mr) {
@@ -88,14 +93,31 @@ router.post('/a', async (req, res) => {
             return res.render('finished')
         }
     }
-
     else {
-        card.current = true; 
-        card = await card.save();
-        res.render('multiStudyQuestion', {
-            Question: card.question,
-            Deck: card.deck
-        })
+        card = await Card.findOne({ user: req.user.username, deck: card.deck, due: true });
+        if (!card) {
+            mr = await MultiReview.findOne({ 
+                username: req.user.username, 
+            });
+            console.log(mr);
+            if (mr) {
+                res.render('multiStudyReview', {
+                    cards: mr.cards
+                });
+            }
+            else {
+                return res.render('finished')
+            }
+        }
+
+        else {
+            card.current = true; 
+            card = await card.save();
+            res.render('multiStudyQuestion', {
+                Question: card.question,
+                Deck: card.deck
+            })
+        }
     }
 });
 
@@ -107,7 +129,7 @@ router.post('/q', async (req, res) => {
 
     // get array of cards that have been reviewed 
     let mr = await MultiReview.findOne({ 
-        username: req.user.username
+        username: req.user.username, 
     });
     let cards = mr.cards;
     console.log(cards.length);

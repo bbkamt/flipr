@@ -1,11 +1,13 @@
 const {Card} = require('../models/card');
 const {Deck, validate} = require('../models/deck');
+const {MultiReview} = require('../models/multiReview');
 const decks = require('../routes/decks');
 const {ensureAuthenticated} = require('./users');
 const mongoose = require('mongoose');
 const datetime = require('node-datetime');
 const express = require('express');
 const router = express.Router();
+
 
 /*Middleware to authenticate the user for each GET/POST request */
 const ensureAuth = function ensureAuthenticated(req, res, next) {
@@ -27,6 +29,7 @@ router.get('/', async (req, res) => {
     if (error) return res.status(400).send(error.details[0].message);
 
     updateAllDue();
+    mr = await MultiReview.deleteOne({ username: req.user.username });
 
     let decks = await Deck.find({ username: req.user.username }).sort({ name: 1 });
     if (!decks) return res.status(400).send('You don\'t have any decks. Create one and try again.');
@@ -56,12 +59,16 @@ router.post('/info', async (req, res) => {
         let dueCards = await Card.countDocuments({ deck: deck.name, due: true}, function(err, count){
             return count;
         });
+        let newCards = await Card.countDocuments({ deck: deck.name, new: true }, function(err, count){
+            return count;
+        });
         
         // render relevant information into page 
         res.render('deckInfo', {
             Deck: deck.name,
             totalCards: totalCards,
-            dueCards: dueCards
+            dueCards: dueCards,
+            newCards: newCards
         })
     }
 

@@ -46,7 +46,7 @@ describe('/api/study', () => {
             );
             const card = await Card.findOne({ count: 1 });
             const result = functions.setInterval(card);
-            assert.equal(card.interval, 6);
+            assert.equal(card.interval, 4);
         });
         it('should set interval to 1 if count is 1', async () => {
             await Card.collection.insertOne({

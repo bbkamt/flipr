@@ -18,14 +18,16 @@ html
             div.welcomeSignIn 
                 div.container
                     h3
-                        | Sign in 
+                        | Welcome. 
+                    p <br>
+                    p Sign in to get started: 
                 div.container
                     form(method='post' action='/api/signup/login')
                         div.form-group
-                            label#form-control(for="username") Username: <br>
-                                input#username.form-control(input name="username" type='text', placeholder='Your username')
+                            label#form-control(for="username") 
+                                input#username.form-control(input name="username" type='text', placeholder=' Username')
                         div.form-group
-                            label#form-control(for="password") Password: <br>
-                                input#password.form-control(input name="password" type='password', placeholder='Your password')
+                            label#form-control(for="password") 
+                                input#password.form-control(input name="password" type='password', placeholder=' Password')
                         button.btn.btn-primary(type='submit') Sign in  
                 
