@@ -39,41 +39,48 @@ router.post('/', async (req, res) => {
     const parser = csv.parse();
     let cardCount = 0;
 
+    let rows = []
     fileStream
         .pipe(parser)
         .on('error', error => console.error(error))
         .on('readable', async () => {
-        for (let row = parser.read(); row; row = parser.read()) {
-                console.log(row);
+            // create array from rows of csv file 
+            for (let row = parser.read(); row; row = parser.read()) {
+                    console.log(row);
+                    rows.push(row);
+                }
+        })
+        .on('end', async (rowCount) => {
+            cardCount = rowCount;
+            console.log(`Parsed ${rowCount} rows`);
+            console.log(cardCount);
+            console.log(rows);
+            // iterate through array of rows from csv file and create card from each 
+            for (let i in rows){
+                //Check for existing deck, creates new deck if none found
+                let deck = await Deck.findOne({ name: rows[i][0].trim(), username: req.user.username });
+                console.log("HERE", deck);
+                if (deck === null) {
+                    deck = new Deck({
+                        name: rows[i][0].trim(),
+                        username: req.user.username
+                    })
+                    deck = await deck.save();
+                }
                 // Create card and save 
                 try{
                     card = new Card({ 
-                        deck: row[0].trim(),
-                        question: row[1],
+                        deck: rows[i][0].trim(),
+                        question: rows[i][1].trim(),
                         user: req.user.username,
-                        answer: row[2],
+                        answer: rows[i][2].trim(),
                     });
                     card = await card.save();
                 } catch(err){
                     console.log(err);
                 }
-                
-            
-                // Check for existing deck, creates new deck if none found
-                let deck = await Deck.findOne({ name: card.deck, username: req.user.username });
-                if (!deck) {
-                    deck = new Deck({
-                        name: card.deck,
-                        username: req.user.username
-                    })
-                    deck = await deck.save();
-                }
+                console.log("card", card);
             }
-        })
-        .on('end', (rowCount) => {
-            cardCount = rowCount;
-            console.log(`Parsed ${rowCount} rows`);
-            console.log(cardCount);
             res.render('uploadSuccess', {
                 cards: cardCount,
                 user: req.user.username

@@ -270,6 +270,22 @@ body {
   padding-right: 20px;
   font-size: 15px;
  }
+ .uploadFormGroup {
+  /* border: 3px solid #66a9c9; */
+  height: 75px;
+  line-height: 25px;
+  width: 60%;
+  text-decoration: none;
+  text-align: left;
+  margin-left: 15%;
+  padding-left: 15%;
+  padding-right: 20px;
+  font-size: 15px;
+ }
+
+ .uploadText {
+   text-align: center
+ }
 
  .form-control {
    width: 35%;

@@ -11,6 +11,9 @@ function setDifficulty(card, q) {
     if (card.difficulty < 1.3) {
         card.difficulty = 1.3;
     }
+    if (card.difficulty > 2.5){
+        card.difficulty = 2.5;
+    }
 }
 
 function setInterval(card){

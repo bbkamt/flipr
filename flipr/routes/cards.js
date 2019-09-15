@@ -8,7 +8,6 @@ const express = require('express');
 const router = express.Router();
 const dotenv = require('dotenv').config();
 
-
 const fileUpload = require('express-fileupload');
 router.use(fileUpload());
 const AWS = require('aws-sdk');
@@ -16,8 +15,6 @@ const AWS = require('aws-sdk');
 // User bodyParser to get data from html form
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
-
-
 
 /*Middleware to authenticate the user for each GET/POST request */
 const ensureAuth = function ensureAuthenticated(req, res, next) {

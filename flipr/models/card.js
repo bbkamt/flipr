@@ -13,9 +13,9 @@ const cardSchema = new mongoose.Schema({
     question: {
         type: String, 
         minlength: 1, 
-        maxlength: 1000,
-        unique: true, 
-        required: true
+        maxlength: 1000, 
+        required: true,
+        unique: false
     },
     answer: {
         type: String, 
@@ -24,6 +24,7 @@ const cardSchema = new mongoose.Schema({
     },
     questionURL: {
         type: String
+        
     },
     tags: {
         type: String
@@ -68,6 +69,7 @@ const cardSchema = new mongoose.Schema({
 });
 
 const Card = mongoose.model("Card", cardSchema);
+Card.collection.dropIndex("question_1");
 
 function validateCard(card) {
     const schema = {

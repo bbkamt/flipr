@@ -4,10 +4,10 @@ block content
   div.container
     h3.pageTitle
         | Create cards from a CSV file 
-    p 
+    p.uploadText 
         | Upload a CSV file containing the deck name, and the front and 
         | back of any cards you'd like to create
-  div.addFormGroup
+  div.uploadFormGroup
     form(method='post' action='/api/upload' enctype='multipart/form-data')
         input#deck.form-control(input type='file' name='name')
         button.btn.btn-primary(input type='submit') Upload
