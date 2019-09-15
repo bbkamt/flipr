@@ -12,7 +12,9 @@ html
         
     div.split.right 
         header.welcomeNav 
-            a(href='/api/signup').welcomeNav Register 
+            
+            form(method='get' action='api/signup') 
+                button.btn.btn-primary() Register
     
         div.centered 
             div.welcomeSignIn 

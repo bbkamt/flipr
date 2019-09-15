@@ -31,7 +31,9 @@ const ensureAuth = function ensureAuthenticated(req, res, next) {
 router.use(ensureAuth);
 
 router.get('/', (req, res) => {
-    res.render('addCard');
+    res.render('addCard', {
+        user: req.user.username
+    });
 })
 
 /*
@@ -44,12 +46,15 @@ router.post('/', async (req, res) => {
     console.log(req.files);
     console.log("here");
     const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
+    if (error) return res.status(400).render('error', {
+        error: error.details[0].message
+    });
     // Check for existing card in user's decks
     let card = await Card.findOne({ user: req.user.username, deck: req.body.deck, question: req.body.question });
-    if (card) return res.status(400).send('Card with same question already registered in that deck.');
-
+    //if (card) return res.status(400).send('Card with same question already registered in that deck.');
+    if (card) return res.status(400).render('error', {
+        error: "Card with same question already registered in that deck."
+    });
     if (!req.files){
         // Create card and save 
         card = new Card({ 
@@ -118,7 +123,9 @@ router.post('/', async (req, res) => {
     }
     
     // Reload add card page 
-    res.render('addCard');
+    res.render('addCard', {
+        user: req.user.username
+    });
 });
 
 /*
@@ -127,8 +134,9 @@ test PUT request to update card
 */
 router.put('/', async (req, res) => {
     const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
+    if (error) return res.status(400).render('error', {
+        error: error.details[0].message
+    });
     let card = await Card.findOne({ question: req.body.question });
     if (!card) return res.status(400).send('That card does not exist');
     console.log(req.body.question);

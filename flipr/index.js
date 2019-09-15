@@ -7,7 +7,6 @@ const passport = require('passport');
 const session = require('express-session');
 const setUpPassport = require('./setuppassport');
 
-
 const cards = require('./routes/cards');
 const decks = require('./routes/decks');
 const study = require('./routes/study');
@@ -23,6 +22,7 @@ const db = config.get('db');
 mongoose.connect(db, { useNewUrlParser: true })
     .then(() => console.log(`Connected to ${db}...`))
     .catch(err => console.error('Could not connect to MongoDB...'));
+
 setUpPassport();
 
 // Get rid of deprecation warnings from mongoose
@@ -52,6 +52,7 @@ app.use('/api/signup', users);
 app.use('/api/multireview', multiReview);
 app.use('/api/multipleChoice', multipleChoice);
 app.use('/api/upload', upload);
+
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {
@@ -62,14 +63,3 @@ const port = process.env.PORT || 3000;
 const server = app.listen(port, () => console.log(`Listening on port ${port}...`));
 
 module.exports = server; 
-
-// app.get('/api/deck', async (req, res) => {
-//     const { error } = validate(req.body);
-//     if (error) return res.status(400).send(error.details[0].message);
-
-//     let card = await Card.find({ question: req.body.question });
-//     if (!card) return res.status(400).send('Card not found.');
-
-//     res.send(card);
-//     })
-

@@ -2,12 +2,12 @@ const {Card} = require('../models/card');
 const {Deck, validate} = require('../models/deck');
 const {MultiReview} = require('../models/multiReview');
 const decks = require('../routes/decks');
+const functions = require('../routes/functions');
 const {ensureAuthenticated} = require('./users');
 const mongoose = require('mongoose');
 const datetime = require('node-datetime');
 const express = require('express');
 const router = express.Router();
-
 
 /*Middleware to authenticate the user for each GET/POST request */
 const ensureAuth = function ensureAuthenticated(req, res, next) {
@@ -28,15 +28,26 @@ router.get('/', async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    updateAllDue();
+    functions.updateAllDue();
     mr = await MultiReview.deleteOne({ username: req.user.username });
 
     let decks = await Deck.find({ username: req.user.username }).sort({ name: 1 });
     if (!decks) return res.status(400).send('You don\'t have any decks. Create one and try again.');
     
-    res.render('decks', {
-        deck: decks
-    });
+    if (decks.length === 0){
+        res.render('decks', {
+            noDeckMessage: "You haven't got any decks yet. Create some cards to get started!",
+            deck: decks,
+            user: req.user.username
+        })
+    }
+
+    else{
+        res.render('decks', {
+            deck: decks,
+            user: req.user.username
+        });
+    }
 });
 
 /*
@@ -53,13 +64,13 @@ router.post('/info', async (req, res) => {
     
     else {
         // aggregate info about deck 
-        let totalCards = await Card.countDocuments({ deck: req.body.deck }, function(err, count){
+        let totalCards = await Card.countDocuments({ user: req.user.username, deck: req.body.deck }, function(err, count){
             return count;
         });
-        let dueCards = await Card.countDocuments({ deck: deck.name, due: true}, function(err, count){
+        let dueCards = await Card.countDocuments({ user: req.user.username, deck: deck.name, due: true}, function(err, count){
             return count;
         });
-        let newCards = await Card.countDocuments({ deck: deck.name, new: true }, function(err, count){
+        let newCards = await Card.countDocuments({ user: req.user.username, deck: deck.name, new: true }, function(err, count){
             return count;
         });
         
@@ -68,7 +79,8 @@ router.post('/info', async (req, res) => {
             Deck: deck.name,
             totalCards: totalCards,
             dueCards: dueCards,
-            newCards: newCards
+            newCards: newCards,
+            user: req.user.username
         })
     }
 

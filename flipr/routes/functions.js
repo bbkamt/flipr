@@ -1,8 +1,9 @@
 const datetime = require('node-datetime');
+const {Card} = require('../models/card')
 
 async function updateAllDue(){
     const date = parseInt(datetime.create().format('Ymd'));
-    const res = await Card.updateMany({ due: false, dueDate: {$lt: date } }, { due: true });
+    const res = await Card.updateMany({ due: false, dueDate: { $lte: date } }, { due: true });
 }
 
 function setDifficulty(card, q) {
@@ -73,3 +74,4 @@ module.exports.setCount = setCount;
 module.exports.setNew = setNew;
 module.exports.setDue = setDue;
 module.exports.setCurrent = setCurrent;
+module.exports.updateAllDue = updateAllDue;

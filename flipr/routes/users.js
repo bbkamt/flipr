@@ -41,6 +41,7 @@ router.post('/', async (req, res) => {
 
     newUser = await newUser.save();
     res.render('decks', {
+        noDeckMessage: "You haven't got any decks yet. Create some cards to get started!",
         deck: ["You don't have any decks yet. Please create some cards to get started."]
     });
     

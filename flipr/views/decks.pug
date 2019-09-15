@@ -10,4 +10,4 @@ block content
         each item in deck
             ol#DeckList 
               button.btn.btn.decks(type='submit', name='deck', value=item.name) #{item.name}
-    
+    p #{noDeckMessage}

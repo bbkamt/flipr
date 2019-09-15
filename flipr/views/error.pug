@@ -1,0 +1,7 @@
+extends default
+
+block content
+  div.container
+    p.finishedMessage Uh oh! It looks like something went wrong. Hit back and try again. 
+    if error
+        p.finishedMessage Error details: #{error}

@@ -1,4 +1,4 @@
-extends default
+extends default_study
 
 block content
   div.reviewContainer
@@ -7,11 +7,11 @@ block content
     p#question #{Question}
     p#answer #{Answer}
 
-    p Correct! 
-
-    form(method='post' action='/api/multiplechoice/q')
-        // name section of the buttons below is passed in body of html request 
-        // can be accessed in .get and .post etc as req.body.NAME 
-        button.btn.btn-review(type='submit', name='difficulty', value='1') Hard
-        button.btn.btn-review(type='submit', name='difficulty', value='2') Good 
-        button.btn.btn-review(type='submit', name='difficulty', value='3') Easy 
+    p#answerMC Correct! 
+    div.btnContainer
+      form(method='post' action='/api/multiplechoice/q')
+          // name section of the buttons below is passed in body of html request 
+          // can be accessed in .get and .post etc as req.body.NAME 
+          button.btn.btn-review(type='submit', name='difficulty', value='1') Hard
+          button.btn.btn-review(type='submit', name='difficulty', value='2') Good 
+          button.btn.btn-review(type='submit', name='difficulty', value='3') Easy 

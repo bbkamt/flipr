@@ -1,4 +1,4 @@
-extends default
+extends default_study
 
 block content
   div.reviewContainer
@@ -6,10 +6,15 @@ block content
         | #{Deck}
     p#question #{Question}
 
-    form(method='post' action='/api/multiplechoice/a')
-        // name section of the buttons below is passed in body of html request 
-        // can be accessed in .get and .post etc as req.body.NAME 
-        button.btn.btn-review(type='submit', name='answer', value=ans1) #{ans1}
-        button.btn.btn-review(type='submit', name='answer', value=ans2) #{ans2}
-        button.btn.btn-review(type='submit', name='answer', value=ans3) #{ans3}
-        button.btn.btn-review(type='submit', name='answer', value=ans4) #{ans4}
+    p#answerMC a) #{ans1} </br>
+    p#answerMC b) #{ans2} </br>
+    p#answerMC c) #{ans3} </br>
+    p#answerMC d) #{ans4} </br>
+    div.btnContainer
+      form(method='post' action='/api/multiplechoice/a')
+          // name section of the buttons below is passed in body of html request 
+          // can be accessed in .get and .post etc as req.body.NAME 
+          button.btn.btn-review(type='submit', name='answer', value=ans1) a
+          button.btn.btn-review(type='submit', name='answer', value=ans2) b
+          button.btn.btn-review(type='submit', name='answer', value=ans3) c
+          button.btn.btn-review(type='submit', name='answer', value=ans4) d

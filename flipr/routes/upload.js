@@ -26,7 +26,9 @@ router.use(ensureAuth);
 router.use(fileUpload());
 
 router.get('/', (req, res) => {
-    res.render('upload');
+    res.render('upload',{
+        user: req.user.username
+    });
 });
 
 router.post('/', async (req, res) => {
@@ -73,7 +75,8 @@ router.post('/', async (req, res) => {
             console.log(`Parsed ${rowCount} rows`);
             console.log(cardCount);
             res.render('uploadSuccess', {
-                cards: cardCount
+                cards: cardCount,
+                user: req.user.username
         })});
 });
     

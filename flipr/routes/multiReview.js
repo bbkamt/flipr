@@ -41,7 +41,8 @@ router.post('/', async (req, res) => {
 
         res.render('multiStudyQuestion', {
             Question: card.question,
-            Deck: card.deck
+            Deck: card.deck,
+            user: req.user.username
         })
     }
 });
@@ -86,11 +87,14 @@ router.post('/a', async (req, res) => {
         console.log(mr);
         if (mr) {
             res.render('multiStudyReview', {
-                cards: mr.cards
+                cards: mr.cards,
+                user: req.user.username
             });
         }
         else {
-            return res.render('finished')
+            return res.render('finished',{
+                user: req.user.username
+            })
         }
     }
     else {
@@ -102,7 +106,8 @@ router.post('/a', async (req, res) => {
             console.log(mr);
             if (mr) {
                 res.render('multiStudyReview', {
-                    cards: mr.cards
+                    cards: mr.cards,
+                    user: req.user.username
                 });
             }
             else {
@@ -115,7 +120,8 @@ router.post('/a', async (req, res) => {
             card = await card.save();
             res.render('multiStudyQuestion', {
                 Question: card.question,
-                Deck: card.deck
+                Deck: card.deck,
+                user: req.user.username
             })
         }
     }
@@ -154,7 +160,9 @@ router.post('/q', async (req, res) => {
 
     mr = await MultiReview.deleteOne({ username: req.user.username });
 
-    res.render('finished')
+    res.render('finished',{
+        user: req.user.username
+    })
 })
 
 /* 
@@ -170,7 +178,8 @@ router.get('/review', async (req, res) => {
     };
 
     res.render('multiStudyReview', {
-        cards: mr.cards
+        cards: mr.cards,
+        user: req.user.username
     });
 });
 

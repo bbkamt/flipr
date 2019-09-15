@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
         card = await card.save();
 
         // find cards to use for multiple choice answers 
-        let cards = await Card.aggregate([{$sample: {size: 3}}]);
+        let cards = await Card.aggregate([{ $match: { user: req.user.username} }, { $sample: {size: 3} }]);
         cards.push(card);
         shuffle(cards);
         res.render('multipleChoice', {
@@ -49,7 +49,8 @@ router.post('/', async (req, res) => {
             ans1: cards[0].answer,
             ans2: cards[1].answer,
             ans3: cards[2].answer,
-            ans4: cards[3].answer
+            ans4: cards[3].answer,
+            user: req.user.username
         })
     }
 });
@@ -65,15 +66,16 @@ router.post('/a', async (req, res) => {
     console.log("answer", answer);
 
     // find current card 
-    let card = await Card.findOne({ username: req.body.username, current: true });
-
+    let card = await Card.findOne({ user: req.user.username, current: true });
+    console.log(card);
     // check if answer matches the card 
     // if correct render page with 3 possible grading options 
     if (card.answer === answer){
         res.render('multipleChoiceCorrect', {
             Question: card.question, 
             Answer: card.answer,
-            Deck: card.deck
+            Deck: card.deck,
+            user: req.user.username
         })
     }
     // if incorrect render page with the correct answer and the next button 
@@ -82,7 +84,8 @@ router.post('/a', async (req, res) => {
             Question: card.question, 
             Answer: card.answer,
             wrongAnswer: answer,
-            Deck: card.deck
+            Deck: card.deck,
+            user: req.user.username
         })
     }
 
@@ -132,28 +135,12 @@ router.post('/q', async (req, res) => {
             ans1: cards[0].answer,
             ans2: cards[1].answer,
             ans3: cards[2].answer,
-            ans4: cards[3].answer
+            ans4: cards[3].answer,
+            user: req.user.username
         })
     }
     
 })
-
-/* 
-Get all cards that have been reviewed by user in a multiReview 
-and send the array of cards to be rendered by html 
-*/
-// router.get('/review', async (req, res) => {
-//     let mr = await MultiReview.findOne({ 
-//         username: req.user.username
-//     });
-//     if (!mr) {
-//         res.render('finished')
-//     };
-
-//     res.render('multiStudyReview', {
-//         cards: mr.cards
-//     });
-// });
 
 module.exports = router;
 

@@ -49,7 +49,8 @@ router.post('/q', async (req, res) => {
         res.render('studyQuestion', {
             Question: card.question,
             Deck: card.deck,
-            URL: card.questionURL
+            URL: card.questionURL,
+            user: req.user.username
         })
     }
 })
@@ -60,8 +61,6 @@ information provided by the user (difficulty rating 0-4). Saves
 the updated information and returns the next card due to be reviewed.
 */
 router.post('/a', async (req, res) => {
-    // const { error } = validate(req.body);
-    // if (error) return res.status(400).send(error.details[0].message);
     let card = await Card.findOne({ user: req.user.username, current: true });
     if (!card) {
         res.render('finished')
@@ -94,7 +93,8 @@ router.post('/a', async (req, res) => {
         res.render('studyQuestion', {
             Question: card.question,
             Deck: card.deck,
-            URL: card.questionURL
+            URL: card.questionURL,
+            user: req.user.username
         })
     }
 });
@@ -115,7 +115,8 @@ router.post('/decks', async (req, res) => {
         res.render('study', {
             Answer: card.answer,
             Question: card.question,
-            Deck: card.deck
+            Deck: card.deck,
+            user: req.user.username
         })
     }
 })
@@ -137,7 +138,8 @@ router.get('/', async (req, res) => {
         console.log(req.body);
         res.render('study', {
             Question: card.question,
-            Answer: card.answer
+            Answer: card.answer,
+            user: req.user.username
         })
     }
 });

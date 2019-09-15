@@ -1,4 +1,4 @@
-extends default
+extends default_study
 
 block content
   div.reviewContainer
@@ -6,7 +6,7 @@ block content
         | #{Deck}
     p#question #{Question}
     if URL
-      img(src=URL, alt="" style="width: 300px; height: 300px")
+      img(src=URL, alt="" style="width: 300px; height: 300px; margin-left: 30%")
     form(method='post' action='/api/study/decks')
       // name section of the buttons below is passed in body of html request 
       // can be accessed in .get and .post etc as req.body.NAME 
